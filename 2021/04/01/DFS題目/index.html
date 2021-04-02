@@ -161,15 +161,6 @@
 <h2 id="解題想法"><a href="#解題想法" class="headerlink" title="解題想法"></a>解題想法</h2><p>使用map存取來達到Adjacency list的效果<br>一個用來存取點與點間的連接關係(ex: A點與B、C、E點有連結 所以mp[A]的字串有BCE)<br>一個用來存取點與點間的邊權重(用來計算maxd的)<br>再用DFS透過遍歷mp[起始點]的連接點”字串”(mp[x][0]、mp[x][1]…)<br>求maxd(最大路徑權重總和)</p>
 <h2 id="AC-code"><a href="#AC-code" class="headerlink" title="AC code"></a>AC code</h2><pre class="line-numbers language-cpp="><code class="language-cpp=">#include<bits/stdc++.h>
 using namespace std;
-const  map  =  &#123; 
-  '＆＃39;' ：'\' ，
-  '＆amp;' ：'＆' ，
-  '＆gt;' ：'>' ，
-  '＆lt;' ：'<' ，
-  '''' ：'“' ，
-  '＆＃123;' ：'&#123;' ，
-  '＆＃125;' ：'&#125;' 
-&#125; ;
 map<char,string>mp;
 map<char,vector<int> >mp2;
 int maxd=0;
@@ -196,7 +187,7 @@ int main()&#123;
     cout << maxd << endl;
     return 0;
 &#125;
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>題目連結 : <a target="_blank" rel="noopener" href="https://zerojudge.tw/ShowProblem?problemid=d908">99年北基區資訊學科能力競賽 4.最佳路徑</a></p>
 
             </div>
