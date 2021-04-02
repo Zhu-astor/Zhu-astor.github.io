@@ -157,7 +157,11 @@
             <!-- Post -->
             <div class="typo" style="padding: 3rem;">
                 <p>首次架設靜態網站，如有疏失，還請多多包涵。歡迎評論</p>
-<h1 id="Zerojudge-d908"><a href="#Zerojudge-d908" class="headerlink" title="Zerojudge d908"></a>Zerojudge d908</h1><h2 id="解題心得"><a href="#解題心得" class="headerlink" title="解題心得"></a>解題心得</h2><p>題目很簡單，對於新手來說只需要會以下兩點:<br>1.存取圖、懂得圖的特性並提取圖的資料<br>2.用DFS(深度優先搜索)來解題(並非唯一解)</p>
+<h1 id="Zerojudge-d908"><a href="#Zerojudge-d908" class="headerlink" title="Zerojudge d908"></a>Zerojudge d908</h1><h2 id="解題心得"><a href="#解題心得" class="headerlink" title="解題心得"></a>解題心得</h2><p>題目很簡單，對於新手來說只需要會以下兩點:</p>
+<ol>
+<li>存取圖、懂得圖的特性並提取圖的資料</li>
+<li>用DFS(深度優先搜索)來解題(並非唯一解)</li>
+</ol>
 <h2 id="解題想法"><a href="#解題想法" class="headerlink" title="解題想法"></a>解題想法</h2><p>使用map存取來達到Adjacency list的效果<br>一個用來存取點與點間的連接關係(ex: A點與B、C、E點有連結 所以mp[A]的字串有BCE)<br>一個用來存取點與點間的邊權重(用來計算maxd的)<br>再用DFS透過遍歷mp[起始點]的連接點”字串”(mp[x][0]、mp[x][1]…)<br>求maxd(最大路徑權重總和)</p>
 <h2 id="AC-code"><a href="#AC-code" class="headerlink" title="AC code"></a>AC code</h2><pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">include</span><span class="token string">&lt;bits/stdc++.h></span></span>
 <span class="token keyword">using</span> <span class="token keyword">namespace</span> std<span class="token punctuation">;</span>
