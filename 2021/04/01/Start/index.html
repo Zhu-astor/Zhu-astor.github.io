@@ -151,83 +151,12 @@
 </nav>
 
         <div id="main" >
-            <div class ="post_page_title_img" style="height: 25rem;background-image: url(https://upload.cc/i1/2021/04/01/jGzCtA.png);background-position: center; background-repeat:no-repeat; background-size:cover;-moz-background-size:cover;overflow:hidden;" >
-                <a href="#" style="padding: 4rem 4rem 2rem 4rem ;"><h2 >Tree</h2></a>
+            <div class ="post_page_title_img" style="height: 25rem;background-image: url(https://upload.cc/i1/2021/04/01/IVd50K.png);background-position: center; background-repeat:no-repeat; background-size:cover;-moz-background-size:cover;overflow:hidden;" >
+                <a href="#" style="padding: 4rem 4rem 2rem 4rem ;"><h2 >Start</h2></a>
             </div>
             <!-- Post -->
             <div class="typo" style="padding: 3rem;">
                 <p>首次架設靜態網站，如有疏失，還請多多包涵。歡迎評論</p>
-<h2 id="解題心得"><a href="#解題心得" class="headerlink" title="解題心得"></a>解題心得</h2><h3 id="Zerojudge-d861"><a href="#Zerojudge-d861" class="headerlink" title="Zerojudge d861"></a>Zerojudge d861</h3><pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">include</span><span class="token string">&lt;bits/stdc++.h></span></span>
-<span class="token keyword">using</span> <span class="token keyword">namespace</span> std<span class="token punctuation">;</span>
-<span class="token keyword">struct</span> node<span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
-    <span class="token keyword">char</span> data<span class="token punctuation">;</span>
-    <span class="token keyword">struct</span> node<span class="token operator">*</span>left<span class="token punctuation">;</span><span class="token comment" spellcheck="true">//指標指向左子樹</span>
-    <span class="token keyword">struct</span> node<span class="token operator">*</span>right<span class="token punctuation">;</span><span class="token comment" spellcheck="true">//指標指向右子樹</span>
-<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span><span class="token punctuation">;</span>
-string ino<span class="token punctuation">,</span>post<span class="token punctuation">;</span>
-<span class="token keyword">int</span> len<span class="token punctuation">,</span>first<span class="token punctuation">;</span><span class="token comment" spellcheck="true">//字串長度，用於提取剩下的字元(即樹的節點)</span>
-<span class="token keyword">void</span> <span class="token function">preorder</span><span class="token punctuation">(</span>node<span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//二元樹先序輸出</span>
-node<span class="token operator">*</span> <span class="token function">buildTree</span><span class="token punctuation">(</span><span class="token keyword">int</span> <span class="token punctuation">,</span><span class="token keyword">int</span> <span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//建造二元樹的函式</span>
-<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
-    ios<span class="token operator">::</span><span class="token function">sync_with_stdio</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">,</span>cin<span class="token punctuation">.</span><span class="token function">tie</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">,</span>cout<span class="token punctuation">.</span><span class="token function">tie</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    cin <span class="token operator">>></span> ino <span class="token operator">>></span> post<span class="token punctuation">;</span>
-    len<span class="token operator">=</span>ino<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    first<span class="token operator">=</span>len<span class="token number">-1</span><span class="token punctuation">;</span>
-    <span class="token comment" spellcheck="true">// cout &lt;&lt; len &lt;&lt; " " &lt;&lt; first &lt;&lt; endl;     </span>
-    node<span class="token operator">*</span> root<span class="token punctuation">;</span>
-    root<span class="token operator">=</span><span class="token function">buildTree</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span>len<span class="token number">-1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token function">preorder</span><span class="token punctuation">(</span>root<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    cout <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
-    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
-<span class="token keyword">void</span> <span class="token function">preorder</span><span class="token punctuation">(</span>node <span class="token operator">*</span>p<span class="token punctuation">)</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
-    <span class="token keyword">if</span><span class="token punctuation">(</span>p<span class="token operator">!=</span><span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
-        cout <span class="token operator">&lt;&lt;</span> p<span class="token operator">-</span><span class="token operator">></span>data<span class="token punctuation">;</span>
-        <span class="token function">preorder</span><span class="token punctuation">(</span>p<span class="token operator">-</span><span class="token operator">></span>left<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token function">preorder</span><span class="token punctuation">(</span>p<span class="token operator">-</span><span class="token operator">></span>right<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
-<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
-node <span class="token operator">*</span><span class="token function">buildTree</span><span class="token punctuation">(</span><span class="token keyword">int</span> left<span class="token punctuation">,</span><span class="token keyword">int</span> right<span class="token punctuation">)</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
-    <span class="token keyword">int</span> mid<span class="token punctuation">;</span>
-    node <span class="token operator">*</span>bNode<span class="token punctuation">;</span>
-    bNode<span class="token operator">=</span><span class="token keyword">new</span> node<span class="token punctuation">;</span><span class="token comment" spellcheck="true">//開創新空間</span>
-    <span class="token keyword">if</span><span class="token punctuation">(</span>first<span class="token operator">>=</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
-        bNode<span class="token operator">-</span><span class="token operator">></span>data<span class="token operator">=</span>post<span class="token punctuation">[</span>first<span class="token operator">--</span><span class="token punctuation">]</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//拿取後序字串</span>
-        <span class="token keyword">if</span><span class="token punctuation">(</span>left<span class="token operator">&lt;</span>right<span class="token punctuation">)</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
-            <span class="token keyword">for</span><span class="token punctuation">(</span><span class="token keyword">int</span> x<span class="token operator">=</span>left<span class="token punctuation">;</span>x<span class="token operator">&lt;=</span>right<span class="token punctuation">;</span>x<span class="token operator">++</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
-                <span class="token keyword">if</span><span class="token punctuation">(</span>ino<span class="token punctuation">[</span>x<span class="token punctuation">]</span><span class="token operator">==</span>bNode<span class="token operator">-</span><span class="token operator">></span>data<span class="token punctuation">)</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
-                    mid<span class="token operator">=</span>x<span class="token punctuation">;</span>
-                    <span class="token keyword">break</span><span class="token punctuation">;</span>
-                <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
-            <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
-            <span class="token comment" spellcheck="true">//右子樹先(後序走訪的特性)</span>
-            <span class="token keyword">if</span><span class="token punctuation">(</span>right<span class="token operator">></span>mid<span class="token punctuation">)</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
-                bNode<span class="token operator">-</span><span class="token operator">></span>right<span class="token operator">=</span><span class="token function">buildTree</span><span class="token punctuation">(</span>mid<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">,</span>right<span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
-            <span class="token keyword">else</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
-                bNode<span class="token operator">-</span><span class="token operator">></span>right<span class="token operator">=</span><span class="token constant">NULL</span><span class="token punctuation">;</span>
-            <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
-            <span class="token comment" spellcheck="true">//在左子樹</span>
-            <span class="token keyword">if</span><span class="token punctuation">(</span>left<span class="token operator">&lt;</span>mid<span class="token punctuation">)</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
-                bNode<span class="token operator">-</span><span class="token operator">></span>left<span class="token operator">=</span><span class="token function">buildTree</span><span class="token punctuation">(</span>left<span class="token punctuation">,</span>mid<span class="token number">-1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
-            <span class="token keyword">else</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
-                bNode<span class="token operator">-</span><span class="token operator">></span>left<span class="token operator">=</span><span class="token constant">NULL</span><span class="token punctuation">;</span>
-            <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
-        <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
-        <span class="token comment" spellcheck="true">//葉節點出現</span>
-        <span class="token keyword">else</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
-            bNode<span class="token operator">-</span><span class="token operator">></span>left<span class="token operator">=</span><span class="token constant">NULL</span><span class="token punctuation">;</span>
-            bNode<span class="token operator">-</span><span class="token operator">></span>right<span class="token operator">=</span><span class="token constant">NULL</span><span class="token punctuation">;</span>
-        <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
-        <span class="token keyword">return</span> bNode<span class="token punctuation">;</span>
-    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
-<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>題目連結 : <a target="_blank" rel="noopener" href="https://zerojudge.tw/ShowProblem?problemid=d861">NOIP2001 3.先序排序</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><pre class="line-numbers language-bash"><code class="language-bash">$ hexo server
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
 
             </div>
 
