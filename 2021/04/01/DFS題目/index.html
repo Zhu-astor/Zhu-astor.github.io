@@ -159,35 +159,44 @@
                 <p>首次架設靜態網站，如有疏失，還請多多包涵。歡迎評論</p>
 <h1 id="Zerojudge-d908"><a href="#Zerojudge-d908" class="headerlink" title="Zerojudge d908"></a>Zerojudge d908</h1><h2 id="解題心得"><a href="#解題心得" class="headerlink" title="解題心得"></a>解題心得</h2><p>題目很簡單，對於新手來說只需要會以下兩點:<br>1.存取圖、懂得圖的特性並提取圖的資料<br>2.用DFS(深度優先搜索)來解題(並非唯一解)</p>
 <h2 id="解題想法"><a href="#解題想法" class="headerlink" title="解題想法"></a>解題想法</h2><p>使用map存取來達到Adjacency list的效果<br>一個用來存取點與點間的連接關係(ex: A點與B、C、E點有連結 所以mp[A]的字串有BCE)<br>一個用來存取點與點間的邊權重(用來計算maxd的)<br>再用DFS透過遍歷mp[起始點]的連接點”字串”(mp[x][0]、mp[x][1]…)<br>求maxd(最大路徑權重總和)</p>
-<h2 id="AC-code"><a href="#AC-code" class="headerlink" title="AC code"></a>AC code</h2><pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">include</span><span class="token string">&lt;bits/stdc++.h></span></span>
-<span class="token keyword">using</span> <span class="token keyword">namespace</span> std<span class="token punctuation">;</span>
-map<span class="token operator">&lt;</span><span class="token keyword">char</span><span class="token punctuation">,</span>string<span class="token operator">></span>mp<span class="token punctuation">;</span>
-map<span class="token operator">&lt;</span><span class="token keyword">char</span><span class="token punctuation">,</span>vector<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">></span> <span class="token operator">></span>mp2<span class="token punctuation">;</span>
-<span class="token keyword">int</span> maxd<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token keyword">void</span> <span class="token function">dfs</span><span class="token punctuation">(</span><span class="token keyword">char</span> p<span class="token punctuation">,</span><span class="token keyword">int</span> sum<span class="token punctuation">)</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
-    <span class="token keyword">if</span><span class="token punctuation">(</span>sum<span class="token operator">></span>maxd<span class="token punctuation">)</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
-        maxd<span class="token operator">=</span>sum<span class="token punctuation">;</span>
-    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
-    <span class="token keyword">for</span><span class="token punctuation">(</span><span class="token keyword">int</span> x<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">;</span>x<span class="token operator">&lt;</span>mp<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>x<span class="token operator">++</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
-        <span class="token function">dfs</span><span class="token punctuation">(</span>mp<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">[</span>x<span class="token punctuation">]</span><span class="token punctuation">,</span>sum<span class="token operator">+</span>mp2<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">[</span>x<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
-<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
-<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
-    ios<span class="token operator">::</span><span class="token function">sync_with_stdio</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">,</span>cin<span class="token punctuation">.</span><span class="token function">tie</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">,</span>cout<span class="token punctuation">.</span><span class="token function">tie</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">char</span> c<span class="token punctuation">,</span>c1<span class="token punctuation">,</span>c2<span class="token punctuation">;</span>
-    cin <span class="token operator">>></span> c<span class="token punctuation">;</span>
-    <span class="token keyword">int</span> n<span class="token punctuation">,</span>num<span class="token punctuation">;</span>
-    cin <span class="token operator">>></span> n<span class="token punctuation">;</span>
-    <span class="token keyword">while</span><span class="token punctuation">(</span>n<span class="token operator">--</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
-        cin <span class="token operator">>></span> c1 <span class="token operator">>></span> c2 <span class="token operator">>></span> num<span class="token punctuation">;</span>
-        mp<span class="token punctuation">[</span>c1<span class="token punctuation">]</span><span class="token operator">+</span><span class="token operator">=</span>c2<span class="token punctuation">;</span>
-        mp2<span class="token punctuation">[</span>c1<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">push_back</span><span class="token punctuation">(</span>num<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
-    <span class="token function">dfs</span><span class="token punctuation">(</span>c<span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    cout <span class="token operator">&lt;&lt;</span> maxd <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
-    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="AC-code"><a href="#AC-code" class="headerlink" title="AC code"></a>AC code</h2><pre class="line-numbers language-cpp="><code class="language-cpp=">#include<bits/stdc++.h>
+using namespace std;
+const  map  =  &#123; 
+  '＆＃39;' ：'\' ，
+  '＆amp;' ：'＆' ，
+  '＆gt;' ：'>' ，
+  '＆lt;' ：'<' ，
+  '''' ：'“' ，
+  '＆＃123;' ：'&#123;' ，
+  '＆＃125;' ：'&#125;' 
+&#125; ;
+map<char,string>mp;
+map<char,vector<int> >mp2;
+int maxd=0;
+void dfs(char p,int sum)&#123;
+    if(sum>maxd)&#123;
+        maxd=sum;
+    &#125;
+    for(int x=0;x<mp[p].size();x++)&#123;
+        dfs(mp[p][x],sum+mp2[p][x]);
+    &#125;
+&#125;
+int main()&#123;
+    ios::sync_with_stdio(0),cin.tie(0),cout.tie(0);
+    char c,c1,c2;
+    cin >> c;
+    int n,num;
+    cin >> n;
+    while(n--)&#123;
+        cin >> c1 >> c2 >> num;
+        mp[c1]+=c2;
+        mp2[c1].push_back(num);
+    &#125;
+    dfs(c,0);
+    cout << maxd << endl;
+    return 0;
+&#125;
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>題目連結 : <a target="_blank" rel="noopener" href="https://zerojudge.tw/ShowProblem?problemid=d908">99年北基區資訊學科能力競賽 4.最佳路徑</a></p>
 
             </div>
