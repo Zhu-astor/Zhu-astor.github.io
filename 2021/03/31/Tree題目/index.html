@@ -157,11 +157,76 @@
             <!-- Post -->
             <div class="typo" style="padding: 3rem;">
                 <p>首次架設靜態網站，如有疏失，還請多多包涵。歡迎評論</p>
-<h2 id="解題心得"><a href="#解題心得" class="headerlink" title="解題心得"></a>解題心得</h2><h3 id="Zerojudge-d861"><a href="#Zerojudge-d861" class="headerlink" title="Zerojudge d861"></a>Zerojudge d861</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">node</span>&#123;</span></span><br><span class="line">    <span class="keyword">char</span> data;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">node</span>*<span class="title">left</span>;</span><span class="comment">//指標指向左子樹</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">node</span>*<span class="title">right</span>;</span><span class="comment">//指標指向右子樹</span></span><br><span class="line">&#125;;</span><br><span class="line">string ino,post;</span><br><span class="line"><span class="keyword">int</span> len,first;<span class="comment">//字串長度，用於提取剩下的字元(即樹的節點)</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">preorder</span><span class="params">(node*)</span></span>;<span class="comment">//二元樹先序輸出</span></span><br><span class="line"><span class="function">node* <span class="title">buildTree</span><span class="params">(<span class="keyword">int</span> ,<span class="keyword">int</span> )</span></span>;<span class="comment">//建造二元樹的函式</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    ios::<span class="built_in">sync_with_stdio</span>(<span class="number">0</span>),cin.<span class="built_in">tie</span>(<span class="number">0</span>),cout.<span class="built_in">tie</span>(<span class="number">0</span>);</span><br><span class="line">    cin &gt;&gt; ino &gt;&gt; post;</span><br><span class="line">    len=ino.<span class="built_in">size</span>();</span><br><span class="line">    first=len<span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// cout &lt;&lt; len &lt;&lt; &quot; &quot; &lt;&lt; first &lt;&lt; endl;     </span></span><br><span class="line">    node* root;</span><br><span class="line">    root=<span class="built_in">buildTree</span>(<span class="number">0</span>,len<span class="number">-1</span>);</span><br><span class="line">    <span class="built_in">preorder</span>(root);</span><br><span class="line">    cout &lt;&lt; endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">preorder</span><span class="params">(node *p)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(p!=<span class="literal">NULL</span>)&#123;</span><br><span class="line">        cout &lt;&lt; p-&gt;data;</span><br><span class="line">        <span class="built_in">preorder</span>(p-&gt;left);</span><br><span class="line">        <span class="built_in">preorder</span>(p-&gt;right);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">node *<span class="title">buildTree</span><span class="params">(<span class="keyword">int</span> left,<span class="keyword">int</span> right)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> mid;</span><br><span class="line">    node *bNode;</span><br><span class="line">    bNode=<span class="keyword">new</span> node;<span class="comment">//開創新空間</span></span><br><span class="line">    <span class="keyword">if</span>(first&gt;=<span class="number">0</span>)&#123;</span><br><span class="line">        bNode-&gt;data=post[first--];<span class="comment">//拿取後序字串</span></span><br><span class="line">        <span class="keyword">if</span>(left&lt;right)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> x=left;x&lt;=right;x++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(ino[x]==bNode-&gt;data)&#123;</span><br><span class="line">                    mid=x;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//右子樹先(後序走訪的特性)</span></span><br><span class="line">            <span class="keyword">if</span>(right&gt;mid)&#123;</span><br><span class="line">                bNode-&gt;right=<span class="built_in">buildTree</span>(mid+<span class="number">1</span>,right);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                bNode-&gt;right=<span class="literal">NULL</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//在左子樹</span></span><br><span class="line">            <span class="keyword">if</span>(left&lt;mid)&#123;</span><br><span class="line">                bNode-&gt;left=<span class="built_in">buildTree</span>(left,mid<span class="number">-1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                bNode-&gt;left=<span class="literal">NULL</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//葉節點出現</span></span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            bNode-&gt;left=<span class="literal">NULL</span>;</span><br><span class="line">            bNode-&gt;right=<span class="literal">NULL</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> bNode;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<h2 id="解題心得"><a href="#解題心得" class="headerlink" title="解題心得"></a>解題心得</h2><h3 id="Zerojudge-d861"><a href="#Zerojudge-d861" class="headerlink" title="Zerojudge d861"></a>Zerojudge d861</h3><pre class=" language-cpp="><code class="language-cpp=">#include<bits/stdc++.h>
+using namespace std;
+struct node&#123;
+    char data;
+    struct node*left;//指標指向左子樹
+    struct node*right;//指標指向右子樹
+&#125;;
+string ino,post;
+int len,first;//字串長度，用於提取剩下的字元(即樹的節點)
+void preorder(node*);//二元樹先序輸出
+node* buildTree(int ,int );//建造二元樹的函式
+int main()&#123;
+    ios::sync_with_stdio(0),cin.tie(0),cout.tie(0);
+    cin >> ino >> post;
+    len=ino.size();
+    first=len-1;
+    // cout << len << " " << first << endl;     
+    node* root;
+    root=buildTree(0,len-1);
+    preorder(root);
+    cout << endl;
+    return 0;
+&#125;
+void preorder(node *p)&#123;
+    if(p!=NULL)&#123;
+        cout << p->data;
+        preorder(p->left);
+        preorder(p->right);
+    &#125;
+&#125;
+node *buildTree(int left,int right)&#123;
+    int mid;
+    node *bNode;
+    bNode=new node;//開創新空間
+    if(first>=0)&#123;
+        bNode->data=post[first--];//拿取後序字串
+        if(left<right)&#123;
+            for(int x=left;x<=right;x++)&#123;
+                if(ino[x]==bNode->data)&#123;
+                    mid=x;
+                    break;
+                &#125;
+            &#125;
+            //右子樹先(後序走訪的特性)
+            if(right>mid)&#123;
+                bNode->right=buildTree(mid+1,right);
+            &#125;
+            else&#123;
+                bNode->right=NULL;
+            &#125;
+            //在左子樹
+            if(left<mid)&#123;
+                bNode->left=buildTree(left,mid-1);
+            &#125;
+            else&#123;
+                bNode->left=NULL;
+            &#125;
+        &#125;
+        //葉節點出現
+        else&#123;
+            bNode->left=NULL;
+            bNode->right=NULL;
+        &#125;
+        return bNode;
+    &#125;
+&#125;
+</code></pre>
 <p>題目連結 : <a target="_blank" rel="noopener" href="https://zerojudge.tw/ShowProblem?problemid=d861">NOIP2001 3.先序排序</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><pre class=" language-bash"><code class="language-bash">$ hexo server
+</code></pre>
 <p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
 
             </div>
