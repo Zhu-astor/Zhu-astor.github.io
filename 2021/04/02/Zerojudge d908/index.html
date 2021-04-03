@@ -149,85 +149,44 @@
 </nav>
 
         <div id="main" >
-            <div class ="post_page_title_img" style="height: 25rem;background-image: url(https://upload.cc/i1/2021/04/01/jGzCtA.png);background-position: center; background-repeat:no-repeat; background-size:cover;-moz-background-size:cover;overflow:hidden;" >
-                <a href="#" style="padding: 4rem 4rem 2rem 4rem ;"><h2 >Tree</h2></a>
+            <div class ="post_page_title_img" style="height: 25rem;background-image: url(https://upload.cc/i1/2021/04/02/2gmlWs.png);background-position: center; background-repeat:no-repeat; background-size:cover;-moz-background-size:cover;overflow:hidden;" >
+                <a href="#" style="padding: 4rem 4rem 2rem 4rem ;"><h2 >Zerojudge d908</h2></a>
             </div>
             <!-- Post -->
             <div class="typo" style="padding: 3rem;">
                 <p>首次架設靜態網站，如有疏失，還請多多包涵。歡迎評論</p>
-<h1 id="Zerojudge-d861"><a href="#Zerojudge-d861" class="headerlink" title="Zerojudge d861"></a>Zerojudge d861</h1><h2 id="解題心得"><a href="#解題心得" class="headerlink" title="解題心得"></a>解題心得</h2><p>這題是我最初還沒學到關於存取二元樹的時候(那時候還只會用Adjacency list)，很想解的一題<br>後來在書上看到使用中序、先序求後序走訪的作法，便在學透那個章節後，自己來推一下<br>AC後真的信心增加很多(太多比賽被電到飛起來QQ)</p>
-<h2 id="解題想法"><a href="#解題想法" class="headerlink" title="解題想法"></a>解題想法</h2><h4 id="有點複雜喔-沒有很難-安全帶繫好-D"><a href="#有點複雜喔-沒有很難-安全帶繫好-D" class="headerlink" title="有點複雜喔 沒有很難 安全帶繫好:D"></a>有點複雜喔 沒有很難 安全帶繫好:D</h4><p>既然給了二元樹的中序走訪、後序走訪，那麼就要先來想想走訪的概念。(說錯歡迎指教&lt;3)<br>preorder(先序走訪) : 父節點-&gt;左子樹-&gt;右子樹<br>inorder(中序走訪) : 左子樹-&gt;父節點-&gt;右子樹<br>postorder(後序走訪) : 左子樹-&gt;右子樹-&gt;父節點<br>(存取圖的部分我使用結構搭配指標)<br>接下來是最重要的部分，用一個函式透過inorder、postorder來建造二元樹再存取起來(結構new node)<br>我使用後序的字串來切割中序，再不停遞迴右子樹再左子樹(為什麼先右子樹是我解題的關鍵，可以自己推推看)<br>一開始我是先宣告一個結構當作根節點，再呼叫建造二元樹的函式，就能一直開創根節點的左子樹的左..(右子樹也是喔)<br>最後再透過前面結構開創的空間，從root開始先序走訪和輸出就好囉(判斷NULL的部分要注意喔)</p>
+<h2 id="解題心得"><a href="#解題心得" class="headerlink" title="解題心得"></a>解題心得</h2><p>題目很簡單，對於新手來說只需要會以下兩點:<br>1.存取圖、懂得圖的特性並提取圖的資料<br>2.用DFS(深度優先搜索)來解題(並非唯一解)</p>
+<h2 id="解題想法"><a href="#解題想法" class="headerlink" title="解題想法"></a>解題想法</h2><p>使用map存取來達到Adjacency list的效果<br>一個用來存取點與點間的連接關係(ex: A點與B、C、E點有連結 所以mp[A]的字串有BCE)<br>一個用來存取點與點間的邊權重(用來計算maxd的)<br>再用DFS透過遍歷mp[起始點]的連接點”字串”(mp[x][0]、mp[x][1]…)<br>求maxd(最大路徑權重總和)</p>
 <h2 id="AC-code"><a href="#AC-code" class="headerlink" title="AC code"></a>AC code</h2><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">#include&lt;bits&#x2F;stdc++.h&gt;
 using namespace std;
-struct node&#123;
-    char data;
-    struct node*left;&#x2F;&#x2F;指標指向左子樹
-    struct node*right;&#x2F;&#x2F;指標指向右子樹
-&#125;;
-string ino,post;
-int len,first;&#x2F;&#x2F;字串長度，用於提取剩下的字元(即樹的節點)
-void preorder(node*);&#x2F;&#x2F;二元樹先序輸出
-node* buildTree(int ,int );&#x2F;&#x2F;建造二元樹的函式
+map&lt;char,string&gt;mp;
+map&lt;char,vector&lt;int&gt; &gt;mp2;
+int maxd&#x3D;0;
+void dfs(char p,int sum)&#123;
+	if(sum&gt;maxd)&#123;
+		maxd&#x3D;sum;
+	&#125;
+	for(int x&#x3D;0;x&lt;mp[p].size();x++)&#123;
+		dfs(mp[p][x],sum+mp2[p][x]);
+	&#125;
+&#125;
 int main()&#123;
-    ios::sync_with_stdio(0),cin.tie(0),cout.tie(0);
-    cin &gt;&gt; ino &gt;&gt; post;
-    len&#x3D;ino.size();
-    first&#x3D;len-1;
-    &#x2F;&#x2F; cout &lt;&lt; len &lt;&lt; &quot; &quot; &lt;&lt; first &lt;&lt; endl;     
-    node* root;
-    root&#x3D;buildTree(0,len-1);
-    preorder(root);
-    cout &lt;&lt; endl;
-    return 0;
-&#125;
-void preorder(node *p)&#123;
-    if(p!&#x3D;NULL)&#123;
-        cout &lt;&lt; p-&gt;data;
-        preorder(p-&gt;left);
-        preorder(p-&gt;right);
-    &#125;
-&#125;
-node *buildTree(int left,int right)&#123;
-    int mid;
-    node *bNode;
-    bNode&#x3D;new node;&#x2F;&#x2F;開創新空間
-    if(first&gt;&#x3D;0)&#123;
-        bNode-&gt;data&#x3D;post[first--];&#x2F;&#x2F;拿取後序字串
-        if(left&lt;right)&#123;
-            for(int x&#x3D;left;x&lt;&#x3D;right;x++)&#123;
-                if(ino[x]&#x3D;&#x3D;bNode-&gt;data)&#123;
-                    mid&#x3D;x;
-                    break;
-                &#125;
-            &#125;
-            &#x2F;&#x2F;右子樹先(後序走訪的特性)
-            if(right&gt;mid)&#123;
-                bNode-&gt;right&#x3D;buildTree(mid+1,right);
-            &#125;
-            else&#123;
-                bNode-&gt;right&#x3D;NULL;
-            &#125;
-            &#x2F;&#x2F;在左子樹
-            if(left&lt;mid)&#123;
-                bNode-&gt;left&#x3D;buildTree(left,mid-1);
-            &#125;
-            else&#123;
-                bNode-&gt;left&#x3D;NULL;
-            &#125;
-        &#125;
-        &#x2F;&#x2F;葉節點出現
-        else&#123;
-            bNode-&gt;left&#x3D;NULL;
-            bNode-&gt;right&#x3D;NULL;
-        &#125;
-        return bNode;
-    &#125;
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+	ios::sync_with_stdio(0),cin.tie(0),cout.tie(0);
+	char c,c1,c2;
+	cin &gt;&gt; c;
+	int n,num;
+	cin &gt;&gt; n;
+	while(n--)&#123;
+		cin &gt;&gt; c1 &gt;&gt; c2 &gt;&gt; num;
+		mp[c1]+&#x3D;c2;
+		mp2[c1].push_back(num);
+	&#125;
+	dfs(c,0);
+	cout &lt;&lt; maxd &lt;&lt; endl;
+	return 0;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>題目連結 : <a target="_blank" rel="noopener" href="https://zerojudge.tw/ShowProblem?problemid=d861">NOIP2001 3.先序排序</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo server<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
+<p>題目連結 : <a target="_blank" rel="noopener" href="https://zerojudge.tw/ShowProblem?problemid=d908">99年北基區資訊學科能力競賽 4.最佳路徑</a></p>
 
             </div>
 
@@ -290,8 +249,8 @@ $('.btn_click_load').click(function() {
 -->
 <script type="text/javascript">
     var disqus_config = function () {
-        this.page.url = 'http://example.com/2021/04/01/Tree/';  // Replace PAGE_URL with your page's canonical URL variable
-        this.page.identifier = 'http://example.com/2021/04/01/Tree/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        this.page.url = 'http://example.com/2021/04/02/Zerojudge%20d908/';  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://example.com/2021/04/02/Zerojudge%20d908/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
     };
 </script>
 
