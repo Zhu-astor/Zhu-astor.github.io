@@ -156,7 +156,7 @@
             <div class="typo" style="padding: 3rem;">
                 <p>首次架設靜態網站，如有疏失，還請多多包涵。歡迎評論</p>
 <h2 id="解題心得"><a href="#解題心得" class="headerlink" title="解題心得"></a>解題心得</h2><p>一開始我想用二分搜尋找前後，結果一直RE<br>後來改成模擬並記錄前後的鄰居，結果TLE<br>只好乖乖看別人的題解，發現原來是我的lower_bound出錯<br>遞迴部份炸了，那我就乖乖地寫while迴圈QQ</p>
-<h2 id="解題想法"><a href="#解題想法" class="headerlink" title="解題想法"></a>解題想法</h2><p>一個vector(不需要優先順序，用insert直接使他有優先順序性，由小到大)<br>一個lower_bound函式(解題主要關鍵)，至於結構加自定義sort就不另外講解<br>最開始我們先在vector裡面加入”0”跟”m”方便後面判斷<br>再來對於當前第一刀，我們提取結構中的ga[x].a(位置)<br>透過lower_bound找到第一個大於等於的元素位置<br>接著一連串判斷(在此省略，這裡自己想會比較有幫助)<br>然後加總就好(習慣性加long long int ，int也會過喔)</p>
+<h2 id="解題想法"><a href="#解題想法" class="headerlink" title="解題想法"></a>解題想法</h2><p>一個vector(不需要優先順序，用insert直接使他有優先順序性，由小到大)<br>一個lower_bound函式(解題主要關鍵)，至於結構加自定義sort就不另外講解<br>最開始我們先在vector裡面加入”0”跟”m”方便後面判斷<br>再來對於當前第一刀，我們提取結構中的ga[x].a(位置)<br>透過lower_bound找到第一個大於等於的元素位置<br>接著一連串判斷後插入(在此省略，這裡自己想會比較有幫助)<br>然後加總就好(習慣性加long long int ，int也會過喔)</p>
 <h5 id="非最佳解-好多人在0-1s之下，只是提供一種粗淺的解題方向"><a href="#非最佳解-好多人在0-1s之下，只是提供一種粗淺的解題方向" class="headerlink" title="非最佳解!好多人在0.1s之下，只是提供一種粗淺的解題方向"></a>非最佳解!好多人在0.1s之下，只是提供一種粗淺的解題方向</h5><h2 id="AC-code"><a href="#AC-code" class="headerlink" title="AC code"></a>AC code</h2><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">#include&lt;bits&#x2F;stdc++.h&gt;
 using namespace std;
 #define ll long long
