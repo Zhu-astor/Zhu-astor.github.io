@@ -156,7 +156,7 @@
             <div class="typo" style="padding: 3rem;">
                 <p>首次架設靜態網站，如有疏失，還請多多包涵。歡迎評論</p>
 <h2 id="解題心得"><a href="#解題心得" class="headerlink" title="解題心得"></a>解題心得</h2><p>直覺就是DFS，所以我就來解了<br>DFS真的讓人又愛又恨…&lt;3<br>喔對了我學到”map以value排序的技巧”<br>然後又複習了map跟vector的clear()(每次都忘)<br>當然這題也不一定需要用到map</p>
-<h2 id="解題想法"><a href="#解題想法" class="headerlink" title="解題想法"></a>解題想法</h2><p>DFS，沒啥好說的，因為我不會BFS…<br>這題麻煩的點有以下兩點:<br>1.紀錄後output部分是以區域數大小排序，相同則英文字母順序<br>2.單組有好多筆所以要清空前面的東西<br>先來說說我一開始的擔憂<br>我直覺使用map，但這就必須使用到”map以value排序”<br>map預設是使用key排序的，所以我就去爬文了.w.<br>後來找到用vector搭配pair並作自定義sort(不難喔)<br>接下來我又有個擔憂了，因為我本身不會算時間複雜度..<br>所以我就在想每一次都需要清空map跟vector，那會不會超時<br>結果意外不會，好人一生平安…<br>補充一下我DFS的方法很笨，就是對字元二維陣列遍歷，搭配布林陣列<br>每找到一個在布林陣列中是false(代表沒走過)的，我就dfs，再設為true</p>
+<h2 id="解題想法"><a href="#解題想法" class="headerlink" title="解題想法"></a>解題想法</h2><p>DFS，沒啥好說的，因為我不會BFS…<br>這題麻煩的點有以下兩點:<br>1.紀錄後output部分是以區域數大小排序，相同則英文字母順序<br>2.單組有好多筆所以要清空前面的東西<br>先來說說我一開始的擔憂<br>我直覺使用map，但這就必須使用到”map以value排序”<br>map預設是使用key排序的，所以我就去爬文了.w.<br>後來找到用vector搭配pair並作自定義sort(不難喔)<br>接下來我又有個擔憂了，因為我本身不會算時間複雜度..<br>所以我就在想每一次都需要清空map跟vector，這樣會不會超時<br>結果意外不會，作者好人一生平安…<br>補充一下，我DFS的方法很笨，就是對字元二維陣列遍歷，搭配布林陣列<br>每找到一個在布林陣列中是false(代表沒走過)的，我就dfs，再設為true</p>
 <h2 id="AC-code"><a href="#AC-code" class="headerlink" title="AC code"></a>AC code</h2><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">#include&lt;bits&#x2F;stdc++.h&gt;
 using namespace std;
 int n,m,g,mean;
