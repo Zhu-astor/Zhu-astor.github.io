@@ -149,74 +149,68 @@
 </nav>
 
         <div id="main" >
-            <div class ="post_page_title_img" style="height: 25rem;background-image: url(https://upload.cc/i1/2021/04/03/jwJz3P.png);background-position: center; background-repeat:no-repeat; background-size:cover;-moz-background-size:cover;overflow:hidden;" >
-                <a href="#" style="padding: 4rem 4rem 2rem 4rem ;"><h2 >Zerojudge  f607</h2></a>
+            <div class ="post_page_title_img" style="height: 25rem;background-image: url(https://upload.cc/i1/2021/04/07/j6Ugc7.png);background-position: center; background-repeat:no-repeat; background-size:cover;-moz-background-size:cover;overflow:hidden;" >
+                <a href="#" style="padding: 4rem 4rem 2rem 4rem ;"><h2 >Zerojudge  f581</h2></a>
             </div>
             <!-- Post -->
             <div class="typo" style="padding: 3rem;">
                 <p>首次架設靜態網站，如有疏失，還請多多包涵。歡迎評論</p>
-<h2 id="解題心得"><a href="#解題心得" class="headerlink" title="解題心得"></a>解題心得</h2><p>一開始我想用二分搜尋找前後，結果一直RE<br>後來改成模擬並記錄前後的鄰居，結果TLE<br>只好乖乖看別人的題解，發現原來是我的lower_bound出錯<br>遞迴部份炸了，那我就乖乖地寫while迴圈QQ</p>
-<h2 id="解題想法"><a href="#解題想法" class="headerlink" title="解題想法"></a>解題想法</h2><p>一個vector(不需要優先順序，用insert直接使他有優先順序性，由小到大)<br>一個lower_bound函式(解題主要關鍵)，至於結構加自定義sort就不另外講解<br>最開始我們先在vector裡面加入”0”跟”m”方便後面判斷<br>再來對於當前第一刀，我們提取結構中的ga[x].a(位置)<br>透過lower_bound找到第一個大於等於的元素位置<br>接著一連串判斷後插入(在此省略，這裡自己想會比較有幫助)<br>然後加總就好(習慣性加long long int ，int也會過喔)</p>
-<h5 id="非最佳解-好多人在0-1s之下，只是提供一種粗淺的解題方向"><a href="#非最佳解-好多人在0-1s之下，只是提供一種粗淺的解題方向" class="headerlink" title="非最佳解!好多人在0.1s之下，只是提供一種粗淺的解題方向"></a>非最佳解!好多人在0.1s之下，只是提供一種粗淺的解題方向</h5><h2 id="AC-code"><a href="#AC-code" class="headerlink" title="AC code"></a>AC code</h2><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">#include&lt;bits&#x2F;stdc++.h&gt;
+<h2 id="解題心得"><a href="#解題心得" class="headerlink" title="解題心得"></a>解題心得</h2><p>算是我對於D&amp;C部分的第一次小推導<br>其實沒有很難就是了，希望在APCS的時候也能發揮<br>不過老實說我一開始並沒有想到用二分搜<br>是在後來看到(n&lt;=200000)才驚覺一般搜尋估計會TLE</p>
+<h2 id="解題想法"><a href="#解題想法" class="headerlink" title="解題想法"></a>解題想法</h2><p>我使用Lower_bound搭配前綴和(累加)<br>還有一個變數代表現在是第幾項<br>說白了就是把一個陣列模擬包裝的概念罷了<br>(習慣開long long int 版面醜很抱歉)<br>Lower_bound的部分是本題我的解題關鍵<br>形式好多種，關鍵觀念不要偏就好<br>比較需要注意的是可以自己想想看<br>使用陣列模擬的情況下 回到原點的各變數修改(小麻煩)</p>
+<h2 id="AC-code"><a href="#AC-code" class="headerlink" title="AC code"></a>AC code</h2><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">#include&lt;bits&#x2F;stdc++.h&gt;
 using namespace std;
 #define ll long long
-struct job&#123;
-    int a,b;
-&#125;;
-job ga[200005];
-vector&lt;int&gt; v;
-bool cmp(job g,job t)&#123;
-    return g.b&lt;t.b;
-&#125;
-int lower_bound(int left,int right,int pa)&#123;
-    int mid;
-    int pos;
+ll int n,m,now&#x3D;0,p,g;
+ll int a[200005],ans&#x3D;0;
+ll int lower_bound(ll int left,ll int right,ll int goal)&#123;
+    ll int mid,pos,ps&#x3D;0;
+    bool ta&#x3D;true;
+    if(left!&#x3D;0)&#123;
+        ps&#x3D;a[left-1];
+    &#125;
     while(left&lt;right)&#123;
         mid&#x3D;(left+right)&#x2F;2;
-        if(v[mid]&lt;pa)&#123;
+        if((a[mid]-ps)&#x3D;&#x3D;goal)&#123;
+            pos&#x3D;mid;
+            ta&#x3D;false;
+            break;
+        &#125;
+        else if((a[mid]-ps)&gt;goal)&#123;
+            &#x2F;&#x2F; too right
+            right&#x3D;mid;
+            ta&#x3D;false;
+            pos&#x3D;right;
+        &#125;
+        else&#123;
             left&#x3D;mid+1;
             pos&#x3D;left;
         &#125;
-        else&#123;
-            right&#x3D;mid;
-            pos&#x3D;right;
-        &#125;
     &#125;
-    return pos;
+    if(ta)&#123;
+        return lower_bound(0,right,goal-(a[right-1]-ps));
+    &#125;
+    else&#123;
+        return pos;
+    &#125;
 &#125;
-
 int main()&#123;
     ios::sync_with_stdio(0),cin.tie(0),cout.tie(0);
-    int n,m;
-    ll int sum&#x3D;0;
     cin &gt;&gt; n &gt;&gt; m;
     for(int x&#x3D;0;x&lt;n;x++)&#123;
-        cin &gt;&gt; ga[x].a &gt;&gt; ga[x].b;
+        cin &gt;&gt; a[x];
+        ans+&#x3D;a[x];
+        a[x]&#x3D;ans;
     &#125;
-    sort(ga,ga+n,cmp);
-    v.push_back(0);
-    v.push_back(m);
-    int k;
-    for(int x&#x3D;0;x&lt;n;x++)&#123;
-        k&#x3D;lower_bound(0,v.size(),ga[x].a);
-        if(k!&#x3D;v.size() &amp;&amp; ga[x].a!&#x3D;m)&#123;
-            if(v[k]&#x3D;&#x3D;ga[x].a)
-            sum+&#x3D;v[k+1]-v[k-2];
-            else&#123;
-                sum+&#x3D;v[k]-v[k-1];
-            &#125;
-        v.insert(v.begin()+k,ga[x].a);
-        &#125;
-        else if(ga[x].a&#x3D;&#x3D;m)&#123;
-            sum+&#x3D;v[v.size()-1]-v[v.size()-2];
-        &#125;
-        &#x2F;&#x2F; cout &lt;&lt; sum &lt;&lt; endl;
+    while(m--)&#123;
+        cin &gt;&gt; p;
+        g&#x3D;lower_bound(now,n,p);
+        now&#x3D;(g+1)%n;
     &#125;
-    cout &lt;&lt; sum &lt;&lt; endl;
+    cout &lt;&lt; now &lt;&lt; endl;
     return 0;
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>題目連結 : <a target="_blank" rel="noopener" href="https://zerojudge.tw/ShowProblem?problemid=f607">2021年1月APCS 3.切割費用</a></p>
+<p>題目連結 : <a target="_blank" rel="noopener" href="https://zerojudge.tw/ShowProblem?problemid=f581">2020年7月APCS 3.圓環出口</a></p>
 
             </div>
 
@@ -279,8 +273,8 @@ $('.btn_click_load').click(function() {
 -->
 <script type="text/javascript">
     var disqus_config = function () {
-        this.page.url = 'http://example.com/2021/04/04/Zerojudge%20f607/';  // Replace PAGE_URL with your page's canonical URL variable
-        this.page.identifier = 'http://example.com/2021/04/04/Zerojudge%20f607/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        this.page.url = 'http://example.com/2021/04/07/Zerojudge%20f581/';  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://example.com/2021/04/07/Zerojudge%20f581/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
     };
 </script>
 
