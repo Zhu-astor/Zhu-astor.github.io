@@ -1,0 +1,345 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+	<link rel="bookmark"  type="image/x-icon"  href="/img/logo_miccall.png"/>
+	<link rel="shortcut icon" href="/img/logo_miccall.png">
+	
+			    <title>
+    Zhu-Life
+    </title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="/css/mic_main.css" />
+    <link rel="stylesheet" href="/css/dropdownMenu.css" />
+    <link rel="stylesheet" href="/css/prism.css">
+    <script src="/js/prism.js" async></script>
+    <meta name="keywords" content="zhu-life" />
+    
+    	<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	 
+    <noscript>
+        <link rel="stylesheet" href="/css/noscript.css" />
+    </noscript>
+    <style type="text/css">
+        body:before {
+          content: ' ';
+          position: fixed;
+          top: 0;
+          background: url('/img/bg.jpg') center 0 no-repeat;
+          right: 0;
+          bottom: 0;
+          left: 0;
+          background-size: cover; 
+        }
+    </style>
+
+			    
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script async type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.scrollex.min.js"></script>
+    <script src="/js/jquery.scrolly.min.js"></script>
+    <script src="/js/skel.min.js"></script>
+    <script src="/js/util.js"></script>
+    <script src="/js/main.js"></script>
+    
+    
+	
+<meta name="generator" content="Hexo 5.4.0"></head>
+    
+		
+<!-- Layouts -->
+
+
+
+<!--  代码渲染  -->
+<link rel="stylesheet" href="/css/prism_coy.css" />
+<link rel="stylesheet" href="/css/typo.css" />
+<!-- 文章页 -->
+<body class="is-loading">
+    <!-- Wrapper 外包 s-->
+    <div id="wrapper" class="fade-in">
+        <!-- Intro 头部显示 s -->
+        <!-- Intro 头部显示 e -->
+        <!-- Header 头部logo start -->
+        <header id="header">
+    <a href="/" class="logo">bubble</a>
+</header>
+        <!-- Nav 导航条 start -->
+        <nav id="nav" class="special" >
+            <ul class="menu links" >
+			<!-- Homepage  主页  --> 
+			<li >
+	            <a href="/" rel="nofollow">首頁</a>
+	        </li>
+			<!-- categories_name  分类   --> 
+	        
+	        <li class="active">
+	            <a href="#s1">分類</a>
+	                    <ul class="submenu">
+	                        <li>
+	                        <a class="category-link" href="/categories/%E8%A7%A3%E9%A1%8C%E7%B4%80%E9%8C%84/">解題紀錄</a></li><li><a class="category-link" href="/categories/%E8%B3%87%E6%BA%90%E5%88%86%E4%BA%AB/">資源分享</a>
+	                    </ul>
+	        </li>
+	        
+	        <!-- archives  归档   --> 
+	        
+	        
+		        <!-- Pages 自定义   -->
+		        
+		        <li>
+		            <a href="/about/" title="簡歷">
+		                簡歷
+		            </a>
+		        </li>
+		        
+		        <li>
+		            <a href="/group/" title="團隊">
+		                團隊
+		            </a>
+		        </li>
+		        
+		        <li>
+		            <a href="/tag/" title="標籤">
+		                標籤
+		            </a>
+		        </li>
+		        
+
+
+            </ul>
+            <!-- icons 图标   -->
+			<ul class="icons">
+                    
+                    <li>
+                        <a title="github" href="https://github.com/Zhu-astor" target="_blank" rel="noopener">
+                            <i class="icon fa fa-github"></i>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a title="500px" href="http://500px.com" target="_blank" rel="noopener">
+                            <i class="icon fa fa-500px"></i>
+                        </a>
+                    </li>
+                    
+			</ul>
+</nav>
+
+        <div id="main" >
+            <div class ="post_page_title_img" style="height: 25rem;background-image: url(https://upload.cc/i1/2021/04/10/vUSZcE.png);background-position: center; background-repeat:no-repeat; background-size:cover;-moz-background-size:cover;overflow:hidden;" >
+                <a href="#" style="padding: 4rem 4rem 2rem 4rem ;"><h2 >Zerojudge  b059</h2></a>
+            </div>
+            <!-- Post -->
+            <div class="typo" style="padding: 3rem;">
+                <p>首次架設靜態網站，如有疏失，還請多多包涵。歡迎評論</p>
+<h2 id="解題心得"><a href="#解題心得" class="headerlink" title="解題心得"></a>解題心得</h2><p>這題就挺經典的走迷宮、尋寶藏的BFS題目，沒試過DFS但感覺會TLE(感覺…)<br>主要是前陣子讀到BFS的章節，有去了解它的核心觀念，剛好有學到象棋馬<br>所以我想起很久前再刷DFS題目的時候看到了這題<br>結果我吃了3個WA…，真的要看清題目，我直覺認為這就跟象棋馬一樣走個”日”…<br>這題因為會輸入好多筆測資，所以我使用的布林陣列就要回歸false，還有deque也要清空<br>然後才發現自己又忘記布林陣列能不能搭配memset了…嘿嘿</p>
+<h2 id="解題想法"><a href="#解題想法" class="headerlink" title="解題想法"></a>解題想法</h2><p>這題我的解題關鍵是在判斷障礙和之後動作的整個過程，其他就是簡單的BFS模板(我這部分主要使用deque，不會去查一下，很好用)<br>我判斷靈犬能不能走那格的方法是，在每次探查新的點時，先檢查他上、下、左、右(jx、jy陣列)，如果非障礙物，再利用數字上的性質(事先操控)<br>轉到下一個真正要走的點(dx、dy陣列)，而此時迴圈的變數就是前面特意操控的jx、jy陣列的變數”乘於2”~”乘於2後加1”<br>這裡有點複雜，最好動手寫寫看，主要是事先準備好dx、dy陣列中的內容與jx、jy陣列中內容的關聯(當然這個非必要，只是解題的小技巧)<br>有些部分還請自己想想看，盡量不要用背的，例如dx、dy陣列的設立、此點經過還是沒有經過的各種判斷<br>如果是剛開始碰到BFS、DFS的初學者，不要忘記迷宮問題通常都會需要有結界的限制，記得檢查!</p>
+<h2 id="AC-code"><a href="#AC-code" class="headerlink" title="AC code"></a>AC code</h2><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">#include&lt;bits&#x2F;stdc++.h&gt;
+using namespace std;
+struct job&#123;
+  int x,y;
+  int step;
+&#125;;
+int dx[]&#x3D;&#123;3,3,1,-1,-3,-3,1,-1&#125;;
+int dy[]&#x3D;&#123;1,-1,3,3,1,-1,-3,-3&#125;;
+int mind&#x3D;999999;
+bool ta[105][105];
+bool ta1[105][105];
+int jx[]&#x3D;&#123;1,0,-1,0&#125;;
+int jy[]&#x3D;&#123;0,1,0,-1&#125;;
+deque&lt;job&gt;now;
+int main()&#123;
+  ios::sync_with_stdio(0),cin.tie(0),cout.tie(0);
+  int sx,sy;
+  int gp,gk;
+  int ex,ey;
+  int n;
+  job next,num;
+  while(cin &gt;&gt; n)&#123;
+    now.clear();
+    memset(ta,0,sizeof(ta));
+    memset(ta1,0,sizeof(ta1));
+    mind&#x3D;999999;
+      for(int x&#x3D;0;x&lt;n;x++)&#123;
+      cin &gt;&gt; gp &gt;&gt; gk;
+      ta[gp][gk]&#x3D;true;
+    &#125;
+    cin &gt;&gt; sx &gt;&gt; sy;
+    cin &gt;&gt; ex &gt;&gt; ey;
+    next.x&#x3D;sx;
+    next.y&#x3D;sy;
+    next.step&#x3D;0;
+    ta1[sx][sy]&#x3D;true;
+    int kx,ky;
+    now.push_back(next);
+    bool ta2&#x3D;false;
+    while(!now.empty())&#123;
+      next&#x3D;now.front();
+      now.pop_front();
+      for(int z&#x3D;0;z&lt;4;z++)&#123;
+        if(ta2)&#123;
+          break;
+        &#125;
+        kx&#x3D;next.x+jx[z];
+        ky&#x3D;next.y+jy[z];
+        if(!ta[kx][ky] &amp;&amp; (kx&gt;&#x3D;0 &amp;&amp; kx&lt;&#x3D;99) &amp;&amp; (ky&gt;&#x3D;0 &amp;&amp; ky&lt;&#x3D;99))&#123;
+          for(int g&#x3D;2*z;g&lt;&#x3D;(2*z)+1;g++)&#123;
+            kx&#x3D;next.x+dx[g];
+            ky&#x3D;next.y+dy[g];
+            num.step&#x3D;next.step+1;
+            num.x&#x3D;kx;
+            num.y&#x3D;ky;
+            if(!ta[kx][ky] &amp;&amp; !ta1[kx][ky] &amp;&amp; (kx&gt;&#x3D;0 &amp;&amp; kx&lt;&#x3D;99) &amp;&amp; (ky&gt;&#x3D;0 &amp;&amp; ky&lt;&#x3D;99) &amp;&amp; (kx!&#x3D;(ex) or ky!&#x3D;(ey)))&#123;
+              ta1[num.x][num.y]&#x3D;true;
+              now.push_back(num);
+            &#125;
+            else if(!ta[kx][ky] &amp;&amp; !ta1[kx][ky] &amp;&amp; (kx&gt;&#x3D;0 &amp;&amp; kx&lt;&#x3D;99) &amp;&amp; (ky&gt;&#x3D;0 &amp;&amp; ky&lt;&#x3D;99) &amp;&amp; (kx&#x3D;&#x3D;(ex) &amp;&amp; ky&#x3D;&#x3D;(ey)))&#123;
+              mind&#x3D;num.step;
+              now.clear();
+              ta2&#x3D;true;
+              break;
+            &#125;
+          &#125;
+        &#125;
+      &#125;
+    &#125;
+    if(mind!&#x3D;999999)
+    cout &lt;&lt; mind &lt;&lt; endl;
+    else&#123;
+      cout &lt;&lt; &quot;impossible&quot; &lt;&lt; endl;
+    &#125;
+  &#125;
+  
+  return 0;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>題目連結 : <a target="_blank" rel="noopener" href="https://zerojudge.tw/ShowProblem?problemid=b059">95年全國資訊學科能力競賽 4.靈犬尋寶</a></p>
+
+            </div>
+
+            <!-- Post Comments -->
+            
+    <!-- 使用 DISQUS_CLICK -->
+<div id="disqus-comment">
+    <div id="disqus_thread"></div>
+
+<!-- add animation -->
+<style>
+	.disqus_click_btn {
+            line-height: 30px;
+            margin: 0;
+            min-width: 50px;
+            padding: 0 14px;
+            display: inline-block;
+            font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0;
+            overflow: hidden;
+            will-change: box-shadow;
+            transition: box-shadow .2s cubic-bezier(.4, 0, 1, 1), background-color .2s cubic-bezier(.4, 0, .2, 1), color .2s cubic-bezier(.4, 0, .2, 1);
+            outline: 0;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            vertical-align: middle;
+            border: 0;
+            background: rgba(158, 158, 158, .2);
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
+            color: #fff;
+            background-color: #7EC0EE;
+            text-shadow: 0
+        }
+</style>
+	
+<div class="btn_click_load" id="disqus_bt"> 
+    <button class="disqus_click_btn">点击查看评论</button>
+</div>
+
+<!--
+<script type="text/javascript">
+$('.btn_click_load').click(function() {
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'http-miccall-tech'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+
+    document.getElementById('disqus_bt').style.display = "none";
+});
+</script>
+-->
+<script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'http://example.com/2021/04/10/Zerojudge%20b059/';  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://example.com/2021/04/10/Zerojudge%20b059/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+</script>
+
+<script type="text/javascript">
+    $('.btn_click_load').click(function() {  //click to load comments
+        (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document;
+            var s = d.createElement('script');
+            s.src = '//http-miccall-tech.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', + new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+        $('.btn_click_load').css('display','none');
+    });
+</script>
+</div>
+<style>
+    #disqus-comment{
+        background-color: #eee;
+        padding: 2pc;
+    }
+</style>
+
+
+        </div>
+        <!-- Copyright 版权 start -->
+                <div id="copyright">
+            <ul>
+                <li>&copy;Powered By <a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/" style="border-bottom: none;">hexo</a></li>
+                <li>Design: <a target="_blank" rel="noopener" href="http://miccall.tech " style="border-bottom: none;">miccall</a></li>
+            </ul>
+            
+                <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+			
+        </div>
+    </div>
+</body>
+
+
+
+ 	
+</html>
