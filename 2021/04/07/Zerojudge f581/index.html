@@ -154,7 +154,7 @@
             </div>
             <!-- Post -->
             <div class="typo" style="padding: 3rem;">
-                <p>首次架設靜態網站，如有疏失，還請多多包涵。歡迎評論</p>
+                <p>首次架設靜態網站，如有疏失，還請多多包涵。歡迎來信<a href="mailto:&#x7a;&#x68;&#117;&#97;&#x73;&#x74;&#111;&#x72;&#x40;&#103;&#109;&#x61;&#105;&#x6c;&#46;&#99;&#111;&#109;">&#x7a;&#x68;&#117;&#97;&#x73;&#x74;&#111;&#x72;&#x40;&#103;&#109;&#x61;&#105;&#x6c;&#46;&#99;&#111;&#109;</a></p>
 <h2 id="解題心得"><a href="#解題心得" class="headerlink" title="解題心得"></a>解題心得</h2><p>算是我對於D&amp;C部分的第一次小推導<br>其實沒有很難，希望在APCS的時候也能如此發揮<br>不過老實說我一開始並沒有想到用二分搜<br>是在後來看到(n&lt;=200000)才驚覺一般搜尋估計會TLE</p>
 <h2 id="解題想法"><a href="#解題想法" class="headerlink" title="解題想法"></a>解題想法</h2><p>我使用Lower_bound搭配前綴和(累加)<br>還有一個變數代表現在是第幾項(now)<br>說白了就是把一個陣列模擬包裝的概念罷了<br>(習慣開long long int 版面醜很抱歉)<br>Lower_bound的部分是本題我的解題關鍵<br>只需要二分搜索求元素扣掉當前位置(now)的前一個元素(因為累加，所以可以得到這段區間的和)<br>至於二分搜的形式有好多種，關鍵觀念不要偏就好<br>比較需要注意的是可以自己想想看<br>使用陣列模擬的情況下，回到開頭的各變數修改(小麻煩)</p>
 <h2 id="AC-code"><a href="#AC-code" class="headerlink" title="AC code"></a>AC code</h2><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">#include&lt;bits&#x2F;stdc++.h&gt;
