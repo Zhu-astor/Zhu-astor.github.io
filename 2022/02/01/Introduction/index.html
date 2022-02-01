@@ -149,77 +149,12 @@
 </nav>
 
         <div id="main" >
-            <div class ="post_page_title_img" style="height: 25rem;background-image: url(https://upload.cc/i1/2021/04/05/O1qUSm.png);background-position: center; background-repeat:no-repeat; background-size:cover;-moz-background-size:cover;overflow:hidden;" >
-                <a href="#" style="padding: 4rem 4rem 2rem 4rem ;"><h2 >Zerojudge  d365</h2></a>
+            <div class ="post_page_title_img" style="height: 25rem;background-image: url(https://upload.cc/i1/2022/02/01/sG4L2I.jpg);background-position: center; background-repeat:no-repeat; background-size:cover;-moz-background-size:cover;overflow:hidden;" >
+                <a href="#" style="padding: 4rem 4rem 2rem 4rem ;"><h2 >Introduction</h2></a>
             </div>
             <!-- Post -->
             <div class="typo" style="padding: 3rem;">
                 <p>首次架設靜態網站，如有疏失，還請多多包涵。歡迎評論</p>
-<h2 id="解題心得"><a href="#解題心得" class="headerlink" title="解題心得"></a>解題心得</h2><p>直覺就是DFS，所以我就來解了<br>DFS真的讓人又愛又恨…&lt;3<br>喔對了我學到”map以value排序的技巧”<br>然後又複習了map跟vector的clear()(每次都忘)<br>當然這題也不一定需要用到map</p>
-<h2 id="解題想法"><a href="#解題想法" class="headerlink" title="解題想法"></a>解題想法</h2><p>DFS，沒啥好說的，因為我不會BFS…<br>這題麻煩的點有以下兩點:<br>1.紀錄後output部分是以區域數大小排序，相同則英文字母順序<br>2.單組有好多筆所以要清空前面的東西<br>先來說說我一開始的擔憂<br>我直覺使用map，但這就必須使用到”map以value排序”<br>map預設是使用key排序的，所以我就去爬文了.w.<br>後來找到用vector搭配pair並作自定義sort(不難喔)<br>接下來我又有個擔憂了，因為我本身不會算時間複雜度..<br>所以我就在想每一次都需要清空map跟vector，這樣會不會超時<br>結果意外不會，作者好人一生平安…<br>補充一下，我DFS的方法很笨，就是對字元二維陣列遍歷，搭配布林陣列<br>每找到一個在布林陣列中是false(代表沒走過)的，我就dfs，再設為true</p>
-<h2 id="AC-code"><a href="#AC-code" class="headerlink" title="AC code"></a>AC code</h2><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">#include&lt;bits&#x2F;stdc++.h&gt;
-using namespace std;
-int n,m,g,mean;
-char c[10005][10005];
-bool ta[10005][10005];
-map&lt;char,int&gt;mp;
-vector&lt;pair&lt;char,int&gt;&gt;vmp;
-int dx[]&#x3D;&#123;1,-1,0,0&#125;;
-int dy[]&#x3D;&#123;0,0,1,-1&#125;;
-void dfs(int nowx,int nowy,char now)&#123;
-    int gx,gy;
-    for(int x&#x3D;0;x&lt;4;x++)&#123;
-        gx&#x3D;nowx+dx[x];
-        gy&#x3D;nowy+dy[x];
-        if(!ta[gx][gy] &amp;&amp; (gx&gt;&#x3D;1 &amp;&amp; gx&lt;&#x3D;n) &amp;&amp; (gy&gt;&#x3D;1 &amp;&amp; gy&lt;&#x3D;m) &amp;&amp; c[gx][gy]&#x3D;&#x3D;now)&#123;
-            ta[gx][gy]&#x3D;true;
-            dfs(gx,gy,now);
-        &#125;
-    &#125;
-&#125;
-bool cmp(const pair&lt;char,int&gt;&amp;v1,const pair&lt;char,int&gt;&amp;v2)&#123;
-    if(v1.second&#x3D;&#x3D;v2.second)&#123;
-        return (v1.first)&lt;(v2.first);
-    &#125;
-    return v1.second&gt;v2.second;
-&#125;
-int main()&#123;
-    ios::sync_with_stdio(0),cin.tie(0),cout.tie(0);
-    cin &gt;&gt; g;
-    mean&#x3D;g;
-    while(g--)&#123;
-        cin &gt;&gt; n &gt;&gt; m;
-        for(int x&#x3D;1;x&lt;&#x3D;n;x++)&#123;
-            for(int y&#x3D;1;y&lt;&#x3D;m;y++)&#123;
-                cin &gt;&gt; c[x][y];
-                ta[x][y]&#x3D;false;
-            &#125;
-        &#125;
-        for(int x&#x3D;1;x&lt;&#x3D;n;x++)&#123;
-            for(int y&#x3D;1;y&lt;&#x3D;m;y++)&#123;
-                if(!ta[x][y])&#123;
-                    ta[x][y]&#x3D;true;
-                    mp[c[x][y]]++;
-                    dfs(x,y,c[x][y]);
-                &#125;
-            &#125;
-        &#125;
-        cout &lt;&lt; &quot;World #&quot;&lt;&lt; mean-g &lt;&lt; endl;
-        for(auto it&#x3D;mp.begin();it!&#x3D;mp.end();it++)&#123;
-            vmp.push_back(make_pair(it-&gt;first,it-&gt;second));
-        &#125;
-        sort(vmp.begin(),vmp.end(),cmp);
-        for(auto it&#x3D;vmp.begin();it!&#x3D;vmp.end();it++)&#123;
-            cout &lt;&lt; it-&gt;first &lt;&lt; &quot;: &quot; &lt;&lt; it-&gt;second &lt;&lt; endl;
-        &#125;
-        mp.clear();
-        vmp.clear();
-    &#125;
-    
-    return 0;
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>題目連結 : <a target="_blank" rel="noopener" href="https://zerojudge.tw/ShowProblem?problemid=d365">UVa10336 - Rank the Languages</a></p>
 
             </div>
 
@@ -282,8 +217,8 @@ $('.btn_click_load').click(function() {
 -->
 <script type="text/javascript">
     var disqus_config = function () {
-        this.page.url = 'http://example.com/2021/04/05/Zerojudge%20d365/';  // Replace PAGE_URL with your page's canonical URL variable
-        this.page.identifier = 'http://example.com/2021/04/05/Zerojudge%20d365/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        this.page.url = 'http://example.com/2022/02/01/Introduction/';  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://example.com/2022/02/01/Introduction/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
     };
 </script>
 
