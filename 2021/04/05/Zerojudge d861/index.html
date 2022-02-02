@@ -100,7 +100,7 @@
 	            <a href="#s1">分類</a>
 	                    <ul class="submenu">
 	                        <li>
-	                        <a class="category-link" href="/categories/%E4%BD%9C%E8%80%85%E7%9B%B8%E9%97%9C/">作者相關</a></li><li><a class="category-link" href="/categories/%E8%A7%A3%E9%A1%8C%E7%B4%80%E9%8C%84/">解題紀錄</a></li><li><a class="category-link" href="/categories/%E8%B3%87%E6%BA%90%E5%88%86%E4%BA%AB/">資源分享</a>
+	                        <a class="category-link" href="/categories/%E8%A7%A3%E9%A1%8C%E7%B4%80%E9%8C%84/">解題紀錄</a></li><li><a class="category-link" href="/categories/%E8%B3%87%E6%BA%90%E5%88%86%E4%BA%AB/">資源分享</a>
 	                    </ul>
 	        </li>
 	        
@@ -139,12 +139,6 @@
                         </a>
                     </li>
                     
-                    <li>
-                        <a title="500px" href="http://500px.com" target="_blank" rel="noopener">
-                            <i class="icon fa fa-500px"></i>
-                        </a>
-                    </li>
-                    
 			</ul>
 </nav>
 
@@ -154,7 +148,7 @@
             </div>
             <!-- Post -->
             <div class="typo" style="padding: 3rem;">
-                <p>首次架設靜態網站，如有疏失，還請多多包涵。歡迎來信<a href="mailto:&#122;&#x68;&#117;&#97;&#x73;&#116;&#111;&#114;&#x40;&#x67;&#109;&#97;&#105;&#108;&#x2e;&#99;&#x6f;&#x6d;">&#122;&#x68;&#117;&#97;&#x73;&#116;&#111;&#114;&#x40;&#x67;&#109;&#97;&#105;&#108;&#x2e;&#99;&#x6f;&#x6d;</a></p>
+                <p>首次架設靜態網站，如有疏失，還請多多包涵。歡迎來信<a href="mailto:&#122;&#104;&#117;&#x61;&#115;&#116;&#x6f;&#x72;&#x40;&#x67;&#109;&#97;&#105;&#x6c;&#x2e;&#x63;&#111;&#109;">&#122;&#104;&#117;&#x61;&#115;&#116;&#x6f;&#x72;&#x40;&#x67;&#109;&#97;&#105;&#x6c;&#x2e;&#x63;&#111;&#109;</a></p>
 <h2 id="解題心得"><a href="#解題心得" class="headerlink" title="解題心得"></a>解題心得</h2><p>這題是我最初還沒學到關於存取二元樹的時候(那時候還只會用Adjacency list)，很想解的一題<br>後來在書上看到使用中序、先序求後序走訪的作法，便在學透那個章節後，自己來推一下<br>AC後真的信心增加很多(太多比賽被電到飛起來QQ)</p>
 <h2 id="解題想法"><a href="#解題想法" class="headerlink" title="解題想法"></a>解題想法</h2><h4 id="有點複雜喔-沒有很難-安全帶繫好-D"><a href="#有點複雜喔-沒有很難-安全帶繫好-D" class="headerlink" title="有點複雜喔 沒有很難 安全帶繫好:D"></a>有點複雜喔 沒有很難 安全帶繫好:D</h4><p>既然給了二元樹的中序走訪、後序走訪，那麼就要先來想想走訪的概念。(說錯歡迎指教&lt;3)<br>preorder(先序走訪) : 父節點-&gt;左子樹-&gt;右子樹<br>inorder(中序走訪) : 左子樹-&gt;父節點-&gt;右子樹<br>postorder(後序走訪) : 左子樹-&gt;右子樹-&gt;父節點<br>(存取圖的部分我使用結構搭配指標)<br>接下來是最重要的部分，用一個函式透過inorder、postorder來建造二元樹再存取起來(結構new node)<br>我使用後序的字串來切割中序，再不停遞迴右子樹再左子樹(為什麼先右子樹是我解題的關鍵，可以自己推推看)<br>一開始我是先宣告一個結構當作根節點，再呼叫建造二元樹的函式，就能一直開創根節點的左子樹的左..(右子樹也是喔)<br>最後再透過前面結構開創的空間，從root開始先序走訪和輸出就好囉(判斷NULL的部分要注意喔)</p>
 <h2 id="AC-code"><a href="#AC-code" class="headerlink" title="AC code"></a>AC code</h2><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">#include&lt;bits&#x2F;stdc++.h&gt;
