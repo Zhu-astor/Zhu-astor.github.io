@@ -148,9 +148,9 @@
             </div>
             <!-- Post -->
             <div class="typo" style="padding: 3rem;">
-                <p>首次架設靜態網站，如有疏失，還請多多包涵。歡迎來信<a href="mailto:&#122;&#x68;&#117;&#x61;&#x73;&#116;&#111;&#114;&#64;&#103;&#x6d;&#x61;&#x69;&#108;&#x2e;&#99;&#111;&#x6d;">&#122;&#x68;&#117;&#x61;&#x73;&#116;&#111;&#114;&#64;&#103;&#x6d;&#x61;&#x69;&#108;&#x2e;&#99;&#111;&#x6d;</a></p>
+                <p>首次架設靜態網站，如有疏失，還請多多包涵。歡迎來信<a href="mailto:&#122;&#x68;&#117;&#97;&#115;&#x74;&#111;&#114;&#64;&#103;&#x6d;&#x61;&#105;&#x6c;&#46;&#x63;&#x6f;&#x6d;">&#122;&#x68;&#117;&#97;&#115;&#x74;&#111;&#114;&#64;&#103;&#x6d;&#x61;&#105;&#x6c;&#46;&#x63;&#x6f;&#x6d;</a></p>
 <h2 id="解題心得"><a href="#解題心得" class="headerlink" title="解題心得"></a>解題心得</h2><p>這題還蠻好玩的，推規律推了一個小時多，然後還吃了11個NA哈哈，不知道正解，僅供參考。我的解法細節部分要注意。</p>
-<h2 id="解題想法"><a href="#解題想法" class="headerlink" title="解題想法"></a>解題想法</h2><p>當箱子數量為偶數，永遠不會有社長與員工將跳同樣箱子的情況，而奇數時則有，我首先針對n=3、5、7進行模擬(對我沒有去想1然後就卡了好幾次NA)，找到每次相遇的位置是有規律的。<br>它的規律很有趣，先觀察他前幾次的相遇位置(等於社長位置!)，第一次會在第中間箱子，第二次則在第1箱子。<br>First:mid =&gt; Second:left =&gt; Third:mid+1 =&gt; Forth:left+1 =&gt;… Last:right(變數設定:left為1，mid為(n/2)+1，right為n)<br>當社長到達right，此時上一個循環結束了，但也是新循環的開始，因此在變數操作上需要注意。<br>想到此時，我發現只需要將目光放在社長身上，員工的位置可以從社長的位置直接得到，問題更簡單了。<br>(Ps:code內註解的”相遇”，就是社長與員工即將跳同樣箱子時的情況。)</p>
+<h2 id="解題想法"><a href="#解題想法" class="headerlink" title="解題想法"></a>解題想法</h2><p>當箱子數量為偶數，永遠不會有社長與員工將跳同樣箱子的情況，而奇數時則有，我首先針對n=3、5、7進行模擬(對我沒有去想1然後就卡了好幾次NA)，找到每次相遇的位置是有規律的。<br>它的規律很有趣，先觀察他前幾次的相遇位置(等於社長位置!)，第一次會在第中間箱子，第二次則在第1箱子。<br>First：mid =&gt; Second：left =&gt; Third：mid+1 =&gt; Forth：left+1 =&gt;… Last：right(變數設定：left為1，mid為(n/2)+1，right為n)<br>當社長到達right，此時上一個循環結束了，但也是新循環的開始，因此在變數操作上需要注意。<br>想到此時，我發現只需要將目光放在社長身上，員工的位置可以從社長的位置直接得到，問題更簡單了。<br>(Ps : code內註解的”相遇”，就是社長與員工即將跳同樣箱子時的情況。)</p>
 <h2 id="AC-code"><a href="#AC-code" class="headerlink" title="AC code"></a>AC code</h2><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">#include&lt;bits&#x2F;stdc++.h&gt;
 using namespace std;
 #define ll long long
@@ -208,7 +208,7 @@ int main()&#123;
     return 0;
 &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>題目連結 : <a target="_blank" rel="noopener" href="https://zerojudge.tw/ShowProblem?problemid=h084">2022年1月APCS 4.牆上海報</a></p>
+<p>題目連結 : <a target="_blank" rel="noopener" href="https://zerojudge.tw/ShowProblem?problemid=g877">板中資訊APCS班程式挑戰賽</a></p>
 
             </div>
 
