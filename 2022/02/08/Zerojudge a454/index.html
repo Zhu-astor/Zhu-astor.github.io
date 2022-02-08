@@ -143,58 +143,94 @@
 </nav>
 
         <div id="main" >
-            <div class ="post_page_title_img" style="height: 25rem;background-image: url(https://upload.cc/i1/2022/02/07/3AMS2a.jpg);background-position: center; background-repeat:no-repeat; background-size:cover;-moz-background-size:cover;overflow:hidden;" >
-                <a href="#" style="padding: 4rem 4rem 2rem 4rem ;"><h2 >Zerojudge  h028</h2></a>
+            <div class ="post_page_title_img" style="height: 25rem;background-image: url(https://i.imgur.com/XKc5m3V.jpg);background-position: center; background-repeat:no-repeat; background-size:cover;-moz-background-size:cover;overflow:hidden;" >
+                <a href="#" style="padding: 4rem 4rem 2rem 4rem ;"><h2 >Zerojudge  a454</h2></a>
             </div>
             <!-- Post -->
             <div class="typo" style="padding: 3rem;">
-                <p>首次架設靜態網站，如有疏失，還請多多包涵。歡迎來信<a href="mailto:&#122;&#104;&#x75;&#x61;&#x73;&#x74;&#111;&#114;&#x40;&#x67;&#x6d;&#x61;&#x69;&#108;&#x2e;&#x63;&#111;&#109;">&#122;&#104;&#x75;&#x61;&#x73;&#x74;&#111;&#114;&#x40;&#x67;&#x6d;&#x61;&#x69;&#108;&#x2e;&#x63;&#111;&#109;</a></p>
-<h2 id="解題心得"><a href="#解題心得" class="headerlink" title="解題心得"></a>解題心得</h2><p>這題我花了大概一個小時多想，期間總共想了三種方法，然後吃了6個NA….，在時間複雜度方面還蠻不熟練的。<br>以下重點針對我AC的歷程解釋。</p>
-<h2 id="解題想法"><a href="#解題想法" class="headerlink" title="解題想法"></a>解題想法</h2><p>時限0.5s，對於還不太會算自己code時間複雜度的人，這讓我蠻警戒的，所以我就先寫檢定時會做的穩定拿部分分的策略，用vector搭配pair存資料，然後找到一個能倒但是不用靠其他樹的樹，再來就依序往前一個”未倒”的樹判斷，然後這些可以倒的樹的資料就erase。<br>很顯然這方法光是刪除就會耗費大量時間。我的解法的重點就在於，快速找尋前一個或者後一個，所以必須想到一種方法可以不用用到刪除，我想到紀錄i樹的le[i]代表他前一個樹的位置，這樣就可以依賴陣列的性質，快速找尋前後依序”未倒”的樹。<br>提醒一下，我這邊維持的是左到右只掃一遍，這是解題的大方向，還請各位自己試試看。<br>然後為了方便我在前後各加入一組數據，分別是0及L。</p>
+                <p>首次架設靜態網站，如有疏失，還請多多包涵。歡迎來信<a href="mailto:&#x7a;&#x68;&#x75;&#x61;&#115;&#116;&#x6f;&#114;&#x40;&#103;&#x6d;&#97;&#x69;&#108;&#46;&#99;&#111;&#x6d;">&#x7a;&#x68;&#x75;&#x61;&#115;&#116;&#x6f;&#114;&#x40;&#103;&#x6d;&#97;&#x69;&#108;&#46;&#99;&#111;&#x6d;</a></p>
+<h2 id="解題心得"><a href="#解題心得" class="headerlink" title="解題心得"></a>解題心得</h2><p>真正完全了解題目花了不少時間，覺得這題可以再多一些備註，我自己也在想像那個項目分布走了蠻多岔路的。然後基本上想對方向就不需要去管那個時限10s。</p>
+<h2 id="解題想法"><a href="#解題想法" class="headerlink" title="解題想法"></a>解題想法</h2><p>直覺解法跟Topological排序有很大關係，事實也差不多，不過這題有些要注意的是，並不一定是”單一”個有向圖，而是可能有同時進行的”多”個有向圖，這點是解題的核心關鍵，除此之外沒其他太深的細節，所以我就開門見山地說了。<br>這題我的解法有兩個重點，dp陣列紀錄每個點在其所有指向該點的點中的最大花費時間，再整個N操作完後，透過mp、mp1的地圖連結性BFS所有有向圖，並對每個有向圖中所有點的dp取最大值，然後這些最大值再取一次最大值即為答案。<br>code有點複雜，個人建議把核心想懂後自己思考出解題路線再來參考程式碼。</p>
 <h2 id="AC-code"><a href="#AC-code" class="headerlink" title="AC code"></a>AC code</h2><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">#include&lt;bits&#x2F;stdc++.h&gt;
 using namespace std;
-int n,l,num&#x3D;0,maxd;
-int c[100005];
-int h[100005];
-int le[100005];
+#define ll long long
+int m;
 int main()&#123;
     ios::sync_with_stdio(0),cin.tie(0),cout.tie(0);
-    cin &gt;&gt; n &gt;&gt;l;
-    c[0]&#x3D;h[0]&#x3D;0;
-    c[n+1]&#x3D;h[n+1]&#x3D;l;
-    for(int x&#x3D;1;x&lt;&#x3D;n;x++)&#123;cin &gt;&gt; c[x];le[x]&#x3D;x-1;&#125;
-    for(int x&#x3D;1;x&lt;&#x3D;n;x++)cin &gt;&gt; h[x];
-    for(int x&#x3D;1;x&lt;&#x3D;n;x++)&#123;
-        if((c[x]-h[x]&gt;&#x3D;c[le[x]]) or (c[x]+h[x]&lt;&#x3D;c[x+1]))&#123;
-            num++;
-            le[x+1]&#x3D;le[x];
-            maxd&#x3D;max(maxd,h[x]);
-            while(true)&#123;
-                if(le[x+1]&gt;0 &amp;&amp; c[le[x+1]]+h[le[x+1]]&lt;&#x3D;c[x+1])&#123;
-                    num++;
-                    maxd&#x3D;max(maxd,h[le[x+1]]);
-                    le[x+1]&#x3D;le[le[x+1]];
-                    
-                &#125;
-                else&#123;
-                    break;
+    cin &gt;&gt; m;
+    while(m--)&#123;
+        int n,p,k;
+        cin &gt;&gt; n;
+        ll int dp[1005]&#x3D;&#123;0&#125;;
+        int a[1005];
+        int r[1005]&#x3D;&#123;0&#125;;
+        bool ta[1005]&#x3D;&#123;0&#125;;
+        bool ta1[1005]&#x3D;&#123;0&#125;;
+        map&lt;int,vector&lt;int&gt;&gt;mp;
+        map&lt;int,vector&lt;int&gt;&gt;mp1;
+        ll int num&#x3D;0;
+        for(int x&#x3D;1;x&lt;&#x3D;n;x++)&#123;
+            cin &gt;&gt; a[x];
+            cin &gt;&gt; k;
+            for(int y&#x3D;0;y&lt;k;y++)&#123;
+                cin &gt;&gt; p;
+                mp[x].push_back(p);
+                mp1[p].push_back(x);
+                r[p]++;
+            &#125;
+        &#125;
+	&#x2F;&#x2F;Make dp[]
+        queue&lt;int&gt;q;
+        for(int x&#x3D;1;x&lt;&#x3D;n;x++)&#123;
+            if(r[x]&#x3D;&#x3D;0 &amp;&amp; !ta[x])&#123;
+                ll int maxd&#x3D;0;
+                q.push(x);
+                while(!q.empty())&#123;
+                    int now&#x3D;q.front();
+                    q.pop();
+                    ta[now]&#x3D;true;
+                    for(int x&#x3D;0;x&lt;mp[now].size();x++)&#123;
+                        r[mp[now][x]]--;
+                        dp[mp[now][x]]&#x3D;max(dp[mp[now][x]],dp[now]+a[now]);
+                        if(r[mp[now][x]]&#x3D;&#x3D;0)&#123;
+                            q.push(mp[now][x]);
+                        &#125;
+                    &#125;
                 &#125;
             &#125;
         &#125;
-    &#125;
-    if(num&#x3D;&#x3D;0)&#123;
-        cout &lt;&lt; 0 &lt;&lt; endl;
-        cout &lt;&lt; 0 &lt;&lt; endl;
-    &#125;
-    else&#123;
+	&#x2F;&#x2F;Start BFS all DAG and record max.
+        for(int x&#x3D;1;x&lt;&#x3D;n;x++)&#123;
+            if(r[x]&#x3D;&#x3D;0 &amp;&amp; !ta1[x])&#123;
+                ll int maxd&#x3D;0;
+                q.push(x);
+                while(!q.empty())&#123;
+                    int now&#x3D;q.front();
+                    q.pop();
+                    if(ta1[now])continue;
+                    ta1[now]&#x3D;true;
+                    maxd&#x3D;max(maxd,dp[now]+a[now]);
+                    for(int y&#x3D;0;y&lt;mp[now].size();y++)&#123;
+                        if(!ta1[mp[now][y]])&#123;
+                            q.push(mp[now][y]);
+                        &#125;
+                    &#125;
+                    for(int y&#x3D;0;y&lt;mp1[now].size();y++)&#123;
+                        if(!ta1[mp1[now][y]])&#123;
+                            q.push(mp1[now][y]);
+                        &#125;
+                    &#125;
+                &#125;
+                num&#x3D;max(maxd,num);
+            &#125;
+        &#125;
         cout &lt;&lt; num &lt;&lt; endl;
-        cout &lt;&lt; maxd &lt;&lt; endl;
     &#125;
 
     return 0;
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>題目連結 : <a target="_blank" rel="noopener" href="https://zerojudge.tw/ShowProblem?problemid=h028">2020年1月APCS 3.砍樹</a></p>
+<p>題目連結 : <a target="_blank" rel="noopener" href="https://zerojudge.tw/ShowProblem?problemid=a454">2010年TOI研習營初選</a></p>
 
             </div>
 
@@ -257,8 +293,8 @@ $('.btn_click_load').click(function() {
 -->
 <script type="text/javascript">
     var disqus_config = function () {
-        this.page.url = 'http://example.com/2022/02/07/Zerojudge%20h028/';  // Replace PAGE_URL with your page's canonical URL variable
-        this.page.identifier = 'http://example.com/2022/02/07/Zerojudge%20h028/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        this.page.url = 'http://example.com/2022/02/08/Zerojudge%20a454/';  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://example.com/2022/02/08/Zerojudge%20a454/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
     };
 </script>
 
