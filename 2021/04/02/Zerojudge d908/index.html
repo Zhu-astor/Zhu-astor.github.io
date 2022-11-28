@@ -148,7 +148,7 @@
             </div>
             <!-- Post -->
             <div class="typo" style="padding: 3rem;">
-                <p>首次架設靜態網站，如有疏失，還請多多包涵。歡迎來信<a href="mailto:&#122;&#x68;&#x75;&#x61;&#115;&#x74;&#x6f;&#114;&#x40;&#103;&#109;&#x61;&#105;&#108;&#46;&#99;&#111;&#109;">&#122;&#x68;&#x75;&#x61;&#115;&#x74;&#x6f;&#114;&#x40;&#103;&#109;&#x61;&#105;&#108;&#46;&#99;&#111;&#109;</a></p>
+                <p>首次架設靜態網站，如有疏失，還請多多包涵。歡迎來信<a href="mailto:&#122;&#x68;&#x75;&#x61;&#115;&#116;&#x6f;&#114;&#x40;&#103;&#x6d;&#x61;&#105;&#108;&#46;&#99;&#111;&#x6d;">&#122;&#x68;&#x75;&#x61;&#115;&#116;&#x6f;&#114;&#x40;&#103;&#x6d;&#x61;&#105;&#108;&#46;&#99;&#111;&#x6d;</a></p>
 <h2 id="解題心得"><a href="#解題心得" class="headerlink" title="解題心得"></a>解題心得</h2><p>題目很簡單，對於新手來說只需要會以下兩點:<br>1.存取圖、懂得圖的特性並提取圖的資料<br>2.用DFS(深度優先搜索)來解題(並非唯一解)</p>
 <h2 id="解題想法"><a href="#解題想法" class="headerlink" title="解題想法"></a>解題想法</h2><p>使用map存取來達到Adjacency list的效果<br>一個用來存取點與點間的連接關係(ex: A點與B、C、E點有連結 所以mp[A]的字串有BCE)<br>一個用來存取點與點間的邊權重(用來計算maxd的)<br>再用DFS透過遍歷mp[起始點]的連接點”字串”(mp[x][0]、mp[x][1]…)<br>求maxd(最大路徑權重總和)</p>
 <h2 id="AC-code"><a href="#AC-code" class="headerlink" title="AC code"></a>AC code</h2><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">#include&lt;bits&#x2F;stdc++.h&gt;
