@@ -143,68 +143,69 @@
 </nav>
 
         <div id="main" >
-            <div class ="post_page_title_img" style="height: 25rem;background-image: url(https://upload.cc/i1/2021/04/07/4I6rnE.png);background-position: center; background-repeat:no-repeat; background-size:cover;-moz-background-size:cover;overflow:hidden;" >
-                <a href="#" style="padding: 4rem 4rem 2rem 4rem ;"><h2 >Zerojudge  f581</h2></a>
+            <div class ="post_page_title_img" style="height: 25rem;background-image: url(https://upload.cc/i1/2022/12/01/IkJnSC.jpg);background-position: center; background-repeat:no-repeat; background-size:cover;-moz-background-size:cover;overflow:hidden;" >
+                <a href="#" style="padding: 4rem 4rem 2rem 4rem ;"><h2 >NUTN CH7 P12</h2></a>
             </div>
             <!-- Post -->
             <div class="typo" style="padding: 3rem;">
-                <p>首次架設靜態網站，如有疏失，還請多多包涵。歡迎來信<a href="mailto:&#x7a;&#x68;&#x75;&#97;&#115;&#116;&#x6f;&#114;&#x40;&#x67;&#x6d;&#x61;&#105;&#108;&#x2e;&#99;&#x6f;&#109;">&#x7a;&#x68;&#x75;&#97;&#115;&#116;&#x6f;&#114;&#x40;&#x67;&#x6d;&#x61;&#105;&#108;&#x2e;&#99;&#x6f;&#109;</a></p>
-<h2 id="解題心得"><a href="#解題心得" class="headerlink" title="解題心得"></a>解題心得</h2><p>算是我對於D&amp;C部分的第一次小推導<br>其實沒有很難，希望在APCS的時候也能如此發揮<br>不過老實說我一開始並沒有想到用二分搜<br>是在後來看到(n&lt;=200000)才驚覺一般搜尋估計會TLE</p>
-<h2 id="解題想法"><a href="#解題想法" class="headerlink" title="解題想法"></a>解題想法</h2><p>我使用Lower_bound搭配前綴和(累加)<br>還有一個變數代表現在是第幾項(now)<br>說白了就是把一個陣列模擬包裝的概念罷了<br>(習慣開long long int 版面醜很抱歉)<br>Lower_bound的部分是本題我的解題關鍵<br>只需要二分搜索求元素扣掉當前位置(now)的前一個元素(因為累加，所以可以得到這段區間的和)<br>至於二分搜的形式有好多種，關鍵觀念不要偏就好<br>比較需要注意的是可以自己想想看<br>使用陣列模擬的情況下，回到開頭的各變數修改(小麻煩)</p>
-<h2 id="AC-code"><a href="#AC-code" class="headerlink" title="AC code"></a>AC code</h2><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">#include&lt;bits&#x2F;stdc++.h&gt;
-using namespace std;
-#define ll long long
-ll int n,m,now&#x3D;0,p,g;
-ll int a[200005],ans&#x3D;0;
-ll int lower_bound(ll int left,ll int right,ll int goal)&#123;
-    ll int mid,pos,ps&#x3D;0;
-    bool ta&#x3D;true;
-    if(left!&#x3D;0)&#123;
-        ps&#x3D;a[left-1];
-    &#125;
-    while(left&lt;right)&#123;
-        mid&#x3D;(left+right)&#x2F;2;
-        if((a[mid]-ps)&#x3D;&#x3D;goal)&#123;
-            pos&#x3D;mid;
-            ta&#x3D;false;
-            break;
-        &#125;
-        else if((a[mid]-ps)&gt;goal)&#123;
-            &#x2F;&#x2F; too right
-            right&#x3D;mid;
-            ta&#x3D;false;
-            pos&#x3D;right;
-        &#125;
-        else&#123;
-            left&#x3D;mid+1;
-            pos&#x3D;left;
-        &#125;
-    &#125;
-    if(ta)&#123;
-        return lower_bound(0,right,goal-(a[right-1]-ps));
-    &#125;
-    else&#123;
-        return pos;
-    &#125;
-&#125;
-int main()&#123;
-    ios::sync_with_stdio(0),cin.tie(0),cout.tie(0);
-    cin &gt;&gt; n &gt;&gt; m;
-    for(int x&#x3D;0;x&lt;n;x++)&#123;
-        cin &gt;&gt; a[x];
-        ans+&#x3D;a[x];
-        a[x]&#x3D;ans;
-    &#125;
-    while(m--)&#123;
-        cin &gt;&gt; p;
-        g&#x3D;lower_bound(now,n,p);
-        now&#x3D;(g+1)%n;
-    &#125;
-    cout &lt;&lt; now &lt;&lt; endl;
-    return 0;
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+                <p>首次架設靜態網站，如有疏失，還請多多包涵。歡迎來信<a href="mailto:&#x7a;&#x68;&#117;&#x61;&#115;&#x74;&#111;&#x72;&#64;&#103;&#x6d;&#97;&#105;&#108;&#x2e;&#99;&#111;&#x6d;">&#x7a;&#x68;&#117;&#x61;&#115;&#x74;&#111;&#x72;&#64;&#103;&#x6d;&#97;&#105;&#108;&#x2e;&#99;&#111;&#x6d;</a></p>
+<h2 id="解題心得"><a href="#解題心得" class="headerlink" title="解題心得"></a>解題心得</h2><p>就二分搜模板題目，順便寫了一個以前在AP325講義看到過的跳躍二分搜，給大家參考，有興趣可以自己查。</p>
+<h2 id="AC-code"><a href="#AC-code" class="headerlink" title="AC code"></a>AC code</h2><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">#define _CRT_SECURE_NO_WARNINGS
+#include&lt;stdio.h&gt;
+#include&lt;stdlib.h&gt;
 
-<p>題目連結 : <a target="_blank" rel="noopener" href="https://zerojudge.tw/ShowProblem?problemid=f581">2020年7月APCS 3.圓環出口</a></p>
+int binary_search(int arr[], int size,int goal) &#123;&#x2F;&#x2F;[,)
+	int left &#x3D; 0, right &#x3D; size, mid;
+	bool find &#x3D; false;
+	while (left &lt; right) &#123;
+		mid &#x3D; (left + right) &#x2F; 2;
+		if (arr[mid] &#x3D;&#x3D; goal) &#123;
+			find &#x3D; true;
+			return mid;
+		&#125;
+		else if (arr[mid] &lt; goal) &#123;
+			left &#x3D; mid + 1;
+		&#125;
+		else &#123;
+			right &#x3D; mid - 1;
+		&#125;
+	&#125;if (!find)return -1;
+&#125;
+
+int jump_search(int arr[], int size, int goal) &#123;&#x2F;&#x2F;[,)
+	int index &#x3D; 0;
+	for (int jump &#x3D; size &#x2F; 2; jump &gt; 0; jump &#x2F;&#x3D; 2) &#123;
+		while (index+jump &lt; size &amp;&amp; arr[jump + index] &lt;&#x3D; goal) &#123;
+			index +&#x3D; jump;
+		&#125;
+	&#125;return index;
+&#125;
+
+int main() &#123;
+	int arr[15];
+
+	for (int x &#x3D; 1; x &lt;&#x3D; 15; x++) &#123;
+		arr[x - 1] &#x3D; x;
+		printf(&quot;%d &quot;, arr[x - 1]);
+	&#125;printf(&quot;\n&quot;);
+
+	for (int x &#x3D; 0; x &lt; 5; x++) &#123;
+		int answer_index &#x3D; binary_search(arr, 15, (x * 2));
+		if (answer_index &#x3D;&#x3D; -1)printf(&quot;%d is not in this array\n&quot;, (x * 2));
+		else printf(&quot;The index is %d\n&quot;, answer_index);
+	&#125;
+
+	for (int x &#x3D; 0; x &lt; 5; x++) &#123;
+		int answer_index &#x3D; jump_search(arr, 15, (x*3));
+		if (arr[0] &#x3D;&#x3D; (x*3))printf(&quot;The index is 0\n&quot;);
+		else if (answer_index &#x3D;&#x3D; 0)printf(&quot;%d is not in this array\n&quot;, (x*3));
+		else printf(&quot;The index is %d\n&quot;, answer_index);
+	&#125;
+
+	system(&quot;pause&quot;);
+	return 0;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 
             </div>
 
@@ -267,8 +268,8 @@ $('.btn_click_load').click(function() {
 -->
 <script type="text/javascript">
     var disqus_config = function () {
-        this.page.url = 'http://example.com/2021/04/07/Zerojudge%20f581/';  // Replace PAGE_URL with your page's canonical URL variable
-        this.page.identifier = 'http://example.com/2021/04/07/Zerojudge%20f581/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        this.page.url = 'http://example.com/2022/12/01/NUTN%20CH7%20P12/';  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://example.com/2022/12/01/NUTN%20CH7%20P12/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
     };
 </script>
 
