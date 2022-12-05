@@ -148,11 +148,15 @@
             </div>
             <!-- Post -->
             <div class="typo" style="padding: 3rem;">
-                <p>首次架設靜態網站，如有疏失，還請多多包涵。歡迎來信<a href="mailto:&#x7a;&#x68;&#117;&#x61;&#115;&#x74;&#111;&#x72;&#64;&#103;&#x6d;&#97;&#105;&#108;&#x2e;&#99;&#111;&#x6d;">&#x7a;&#x68;&#117;&#x61;&#115;&#x74;&#111;&#x72;&#64;&#103;&#x6d;&#97;&#105;&#108;&#x2e;&#99;&#111;&#x6d;</a></p>
-<h2 id="解題心得"><a href="#解題心得" class="headerlink" title="解題心得"></a>解題心得</h2><p>就二分搜模板題目，順便寫了一個以前在AP325講義看到過的跳躍二分搜，給大家參考，有興趣可以自己查。</p>
+                <p>首次架設靜態網站，如有疏失，還請多多包涵。歡迎來信<a href="mailto:&#122;&#104;&#x75;&#97;&#x73;&#x74;&#111;&#114;&#64;&#x67;&#109;&#97;&#x69;&#108;&#46;&#x63;&#x6f;&#109;">&#122;&#104;&#x75;&#97;&#x73;&#x74;&#111;&#114;&#64;&#x67;&#109;&#97;&#x69;&#108;&#46;&#x63;&#x6f;&#109;</a></p>
+<h2 id="解題心得"><a href="#解題心得" class="headerlink" title="解題心得"></a>解題心得</h2><p>練習了一下merge_sort，以前使用C++的時候真的很少擔心排序的問題，有點新鮮。<br>再來就二分搜模板題目，順便寫了一個以前在AP325講義看到過的跳躍二分搜，給大家參考，有興趣可以自己查。</p>
 <h2 id="AC-code"><a href="#AC-code" class="headerlink" title="AC code"></a>AC code</h2><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">#define _CRT_SECURE_NO_WARNINGS
 #include&lt;stdio.h&gt;
 #include&lt;stdlib.h&gt;
+
+#define array_size 15
+
+int temp[array_size];
 
 int binary_search(int arr[], int size,int goal) &#123;&#x2F;&#x2F;[,)
 	int left &#x3D; 0, right &#x3D; size, mid;
@@ -181,30 +185,46 @@ int jump_search(int arr[], int size, int goal) &#123;&#x2F;&#x2F;[,)
 	&#125;return index;
 &#125;
 
-int main() &#123;
-	int arr[15];
+void merge_sort(int arr[],int le,int ri) &#123;
+	if (le + 1 &gt;&#x3D; ri)return; 
+	int mid &#x3D; (le + ri) &#x2F; 2;
+	merge_sort(arr, le, mid);
+	merge_sort(arr, mid, ri);
+	int right_index &#x3D; mid, temp_index &#x3D; 0;
+	for (int x &#x3D; le; x &lt; mid; x++) &#123;
+		while (right_index &lt; ri &amp;&amp; arr[right_index] &lt; arr[x]) &#123;
+			temp[temp_index++] &#x3D; arr[right_index++];
+		&#125;temp[temp_index++] &#x3D; arr[x];
+	&#125;
+	for (int x &#x3D; le; x &lt; le+temp_index; x++) &#123;
+		arr[x] &#x3D; temp[x - le];
+	&#125;
+&#125;
 
-	for (int x &#x3D; 1; x &lt;&#x3D; 15; x++) &#123;
-		arr[x - 1] &#x3D; x;
-		printf(&quot;%d &quot;, arr[x - 1]);
+int main() &#123;
+	int arr[array_size]&#x3D;&#123;1213,3223,11,31224,2525,37754,23234,32,2,1,-12231,23556,8906,23555,111&#125;;
+
+	int search_arr[5] &#x3D; &#123; -122311,8906,111,31224,2525 &#125;;
+
+	merge_sort(arr, 0, array_size);
+
+	for (int x &#x3D; 0; x &lt; 15; x++) &#123;
+		printf(&quot;%d &quot;, arr[x]);
 	&#125;printf(&quot;\n&quot;);
 
 	for (int x &#x3D; 0; x &lt; 5; x++) &#123;
-		int answer_index &#x3D; binary_search(arr, 15, (x * 2));
-		if (answer_index &#x3D;&#x3D; -1)printf(&quot;%d is not in this array\n&quot;, (x * 2));
-		else printf(&quot;The index is %d\n&quot;, answer_index);
-	&#125;
-
-	for (int x &#x3D; 0; x &lt; 5; x++) &#123;
-		int answer_index &#x3D; jump_search(arr, 15, (x*3));
-		if (arr[0] &#x3D;&#x3D; (x*3))printf(&quot;The index is 0\n&quot;);
-		else if (answer_index &#x3D;&#x3D; 0)printf(&quot;%d is not in this array\n&quot;, (x*3));
-		else printf(&quot;The index is %d\n&quot;, answer_index);
+		int binary_search_answer_index &#x3D; binary_search(arr, array_size, search_arr[x]);
+		int jump_search_answer_index &#x3D; jump_search(arr, array_size, search_arr[x]);
+		if (binary_search_answer_index &#x3D;&#x3D; -1)printf(&quot;Can\&#39;t find %d in array\n&quot;,search_arr[x]);
+		else &#123;
+			printf(&quot;%d\&#39;s index in array is %d(binary_search)\n&quot;, search_arr[x],binary_search_answer_index);
+			printf(&quot;%d\&#39;s index in array is %d(jump_search)\n&quot;, search_arr[x], jump_search_answer_index);
+		&#125;printf(&quot;\n&quot;);
 	&#125;
 
 	system(&quot;pause&quot;);
 	return 0;
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 
             </div>
