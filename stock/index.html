@@ -63,7 +63,11 @@
 <script>
   const REGISTRY_URL = './data/tunnel-registry.json'
   const QUOTES_URL = './data/quotes.json'
-  const HEALTH_CHECK_PATH = '/api/quotes'
+  // A tiny fixed-size endpoint, not /api/quotes (~400KB of ~2000 symbols) —
+  // over a free tunnel relay, fetching the full payload could take longer
+  // than the health-check timeout even while the tunnel itself is fine,
+  // which was misdiagnosing a working connection as down.
+  const HEALTH_CHECK_PATH = '/api/health'
   const HEALTH_TIMEOUT_MS = 3000
   const RECHECK_INTERVAL_MS = 30000
 
