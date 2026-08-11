@@ -101,10 +101,11 @@
     return null
   }
 
+  // v is already denominated in 張 (1張=1000股) — same fix as
+  // Real_time/src/lib/utils.ts's formatVolumeTaiwan, do not divide again.
   function formatVolume(v) {
-    if (v >= 100000000) return (v / 100000000).toFixed(2) + '億'
-    if (v >= 1000) return Math.round(v / 1000) + '張'
-    return v + '張'
+    if (v >= 10000) return (v / 10000).toFixed(1) + '萬張'
+    return Math.round(v).toLocaleString() + '張'
   }
 
   async function renderStatic() {
