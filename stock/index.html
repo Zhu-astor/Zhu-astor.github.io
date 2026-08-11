@@ -88,6 +88,20 @@
   // if the dev machine is off). Output: the live URL, or null.
   // Failure modes: registry missing/unreachable, dynamic URL down/timed
   // out, CORS blocked — all treated identically as "not live".
+  async function pingOnce(url) {
+    try {
+      const res = await fetch(url + HEALTH_CHECK_PATH, { signal: AbortSignal.timeout(HEALTH_TIMEOUT_MS) })
+      return res.ok
+    } catch {
+      return false
+    }
+  }
+
+  // Free quick tunnels have occasional single-request blips (one dropped
+  // packet, a slow relay hop) that don't mean the tunnel is actually down —
+  // retrying once before giving up on this check avoids flipping the whole
+  // page to static over a one-off hiccup that would have succeeded a second
+  // later anyway.
   async function findLiveUrl() {
     let reg
     try {
@@ -96,12 +110,9 @@
       return null
     }
     if (!reg || !reg.url) return null
-    try {
-      const res = await fetch(reg.url + HEALTH_CHECK_PATH, { signal: AbortSignal.timeout(HEALTH_TIMEOUT_MS) })
-      if (res.ok) return reg.url
-    } catch {
-      // dynamic host unreachable/timed out/CORS-blocked — fall through to static
-    }
+    if (await pingOnce(reg.url)) return reg.url
+    await new Promise((r) => setTimeout(r, 800))
+    if (await pingOnce(reg.url)) return reg.url
     return null
   }
 
@@ -147,19 +158,32 @@
     }).join('')
   }
 
+  // Switch TO live the moment it's reachable (fast recovery), but require
+  // two consecutive failed refresh cycles (~30s apart, each already
+  // internally retried once) before switching AWAY from live — a single bad
+  // cycle is treated as a blip, not a real outage, so the page doesn't
+  // flicker to static and back over a momentary hiccup.
+  let consecutiveFailures = 0
+
   async function refresh() {
     const liveUrl = await findLiveUrl()
     if (liveUrl) {
+      consecutiveFailures = 0
       setBadge('live', '即時模式 LIVE')
       if (frame.src !== liveUrl + '/') frame.src = liveUrl
       frame.style.display = 'block'
       staticView.style.display = 'none'
-    } else {
-      setBadge('static', '靜態模式（每 5 分鐘更新）')
-      frame.style.display = 'none'
-      staticView.style.display = 'block'
-      renderStatic()
+      return
     }
+
+    consecutiveFailures++
+    if (badge.className === 'live' && consecutiveFailures < 2) {
+      return // one bad cycle while already live — stay put, recheck next tick
+    }
+    setBadge('static', '靜態模式（每 5 分鐘更新）')
+    frame.style.display = 'none'
+    staticView.style.display = 'block'
+    renderStatic()
   }
 
   refresh()
