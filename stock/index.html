@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>台股即時看盤</title>
+<style>
+  :root {
+    --bg: #0b0f14;
+    --panel: #131a22;
+    --border: #24303b;
+    --text: #e7edf3;
+    --muted: #8a97a3;
+    --live: #17c964;
+    --live-bg: rgba(23, 201, 100, 0.12);
+    --static: #f5a524;
+    --static-bg: rgba(245, 165, 36, 0.12);
+    --up: #f5384f;
+    --down: #17c964;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text); font-family: -apple-system, "Segoe UI", "PingFang TC", "Microsoft JhengHei", sans-serif; }
+  #badge {
+    position: fixed; top: 10px; right: 12px; z-index: 1000;
+    padding: 6px 12px; border-radius: 999px; font-size: 13px; font-weight: 600;
+    border: 1px solid var(--border); backdrop-filter: blur(6px);
+    display: flex; align-items: center; gap: 6px;
+  }
+  #badge.live { color: var(--live); background: var(--live-bg); border-color: var(--live); }
+  #badge.static { color: var(--static); background: var(--static-bg); border-color: var(--static); }
+  #badge.checking { color: var(--muted); background: var(--panel); }
+  #badge .dot { font-size: 10px; }
+  #live-frame { display: none; width: 100%; height: 100vh; border: 0; }
+  #static-view { display: none; padding: 56px 16px 24px; max-width: 900px; margin: 0 auto; }
+  #static-view h1 { font-size: 18px; margin: 0 0 4px; }
+  #static-view .updated { color: var(--muted); font-size: 12px; margin-bottom: 16px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: right; padding: 8px 10px; border-bottom: 1px solid var(--border); }
+  th:first-child, td:first-child, th:nth-child(2), td:nth-child(2) { text-align: left; }
+  th { color: var(--muted); font-weight: 500; font-size: 12px; }
+  td.up { color: var(--up); }
+  td.down { color: var(--down); }
+  #empty { color: var(--muted); text-align: center; padding: 40px 0; }
+</style>
+</head>
+<body>
+  <div id="badge" class="checking"><span class="dot">●</span><span id="badge-text">檢查中…</span></div>
+
+  <iframe id="live-frame" title="即時看盤（動態站）"></iframe>
+
+  <div id="static-view">
+    <h1>台股即時看盤（靜態備援）</h1>
+    <div class="updated" id="updated-text">載入中…</div>
+    <div id="empty" style="display:none">目前沒有資料，等待下一次自動更新（每 5 分鐘）。</div>
+    <table id="quotes-table" style="display:none">
+      <thead>
+        <tr><th>代號</th><th>名稱</th><th>股價</th><th>漲跌%</th><th>成交量(張)</th></tr>
+      </thead>
+      <tbody id="quotes-body"></tbody>
+    </table>
+  </div>
+
+<script>
+  const REGISTRY_URL = './data/tunnel-registry.json'
+  const QUOTES_URL = './data/quotes.json'
+  const HEALTH_CHECK_PATH = '/api/quotes'
+  const HEALTH_TIMEOUT_MS = 3000
+  const RECHECK_INTERVAL_MS = 30000
+
+  const badge = document.getElementById('badge')
+  const badgeText = document.getElementById('badge-text')
+  const frame = document.getElementById('live-frame')
+  const staticView = document.getElementById('static-view')
+
+  function setBadge(mode, text) {
+    badge.className = mode
+    badgeText.textContent = text
+  }
+
+  // Input: tunnel-registry.json ({url, updatedAt}) written by the local
+  // start-with-tunnel.ps1 launcher each time cloudflared hands out a new
+  // trycloudflare.com URL. Processing: confirm the registered URL is not
+  // just present but actually answering right now (registry can be stale
+  // if the dev machine is off). Output: the live URL, or null.
+  // Failure modes: registry missing/unreachable, dynamic URL down/timed
+  // out, CORS blocked — all treated identically as "not live".
+  async function findLiveUrl() {
+    let reg
+    try {
+      reg = await fetch(`${REGISTRY_URL}?_=${Date.now()}`).then((r) => r.json())
+    } catch {
+      return null
+    }
+    if (!reg || !reg.url) return null
+    try {
+      const res = await fetch(reg.url + HEALTH_CHECK_PATH, { signal: AbortSignal.timeout(HEALTH_TIMEOUT_MS) })
+      if (res.ok) return reg.url
+    } catch {
+      // dynamic host unreachable/timed out/CORS-blocked — fall through to static
+    }
+    return null
+  }
+
+  function formatVolume(v) {
+    if (v >= 100000000) return (v / 100000000).toFixed(2) + '億'
+    if (v >= 1000) return Math.round(v / 1000) + '張'
+    return v + '張'
+  }
+
+  async function renderStatic() {
+    let data
+    try {
+      data = await fetch(`${QUOTES_URL}?_=${Date.now()}`).then((r) => r.json())
+    } catch {
+      data = { updatedAt: null, stocks: [] }
+    }
+    const updatedText = document.getElementById('updated-text')
+    updatedText.textContent = data.updatedAt
+      ? `最後更新：${new Date(data.updatedAt).toLocaleString('zh-TW', { hour12: false })}（每 5 分鐘自動更新）`
+      : '尚未有資料'
+
+    const table = document.getElementById('quotes-table')
+    const empty = document.getElementById('empty')
+    const body = document.getElementById('quotes-body')
+    if (!data.stocks || !data.stocks.length) {
+      table.style.display = 'none'
+      empty.style.display = 'block'
+      return
+    }
+    empty.style.display = 'none'
+    table.style.display = 'table'
+    body.innerHTML = data.stocks.map((s) => {
+      const cls = s.changePercent > 0 ? 'up' : s.changePercent < 0 ? 'down' : ''
+      const sign = s.changePercent > 0 ? '+' : ''
+      return `<tr>
+        <td>${s.symbol}</td>
+        <td>${s.name}</td>
+        <td>${s.price}</td>
+        <td class="${cls}">${sign}${s.changePercent}%</td>
+        <td>${formatVolume(s.volume)}</td>
+      </tr>`
+    }).join('')
+  }
+
+  async function refresh() {
+    const liveUrl = await findLiveUrl()
+    if (liveUrl) {
+      setBadge('live', '即時模式 LIVE')
+      if (frame.src !== liveUrl + '/') frame.src = liveUrl
+      frame.style.display = 'block'
+      staticView.style.display = 'none'
+    } else {
+      setBadge('static', '靜態模式（每 5 分鐘更新）')
+      frame.style.display = 'none'
+      staticView.style.display = 'block'
+      renderStatic()
+    }
+  }
+
+  refresh()
+  setInterval(refresh, RECHECK_INTERVAL_MS)
+</script>
+</body>
+</html>

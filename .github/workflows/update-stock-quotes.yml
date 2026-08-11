@@ -1,0 +1,39 @@
+name: Update stock quotes
+
+on:
+  schedule:
+    # GitHub Actions cron does not guarantee exact timing (can slip several
+    # minutes under load) — this is the accepted tradeoff for a free,
+    # no-extra-account static refresh mechanism. See stock/index.html's
+    # "static mode" badge, which always shows the real updatedAt time rather
+    # than pretending the data is fresher than it is.
+    - cron: '*/5 * * * *'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  update-quotes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Fetch latest quotes
+        run: node stock/scripts/fetch-quotes.mjs
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add stock/data/quotes.json
+          if git diff --staged --quiet; then
+            echo "No data change, skipping commit."
+          else
+            git commit -m "Update stock quotes [skip ci]"
+            git push
+          fi
