@@ -41,6 +41,33 @@
   td.up { color: var(--up); }
   td.down { color: var(--down); }
   #empty { color: var(--muted); text-align: center; padding: 40px 0; }
+
+  /* Debug log panel — always recording, collapsed by default. Exists so a
+     real flip-to-static can be diagnosed from what actually happened in
+     THIS browser session, instead of guesswork from the dev machine's own
+     side (which was repeatedly wrong: payload-size timeouts, IPv6 dials,
+     background-process reaping — none of those were visible without this). */
+  #debug-toggle {
+    position: fixed; bottom: 10px; right: 12px; z-index: 1001;
+    padding: 5px 10px; border-radius: 6px; font-size: 12px; font-family: monospace;
+    background: var(--panel); border: 1px solid var(--border); color: var(--muted);
+    cursor: pointer;
+  }
+  #debug-panel {
+    display: none; position: fixed; bottom: 44px; right: 12px; z-index: 1001;
+    width: min(560px, calc(100vw - 24px)); height: 320px;
+    background: var(--panel); border: 1px solid var(--border); border-radius: 8px;
+    padding: 8px; overflow-y: auto; font-family: monospace; font-size: 11px;
+    line-height: 1.5; color: var(--text); white-space: pre-wrap;
+  }
+  #debug-panel.open { display: block; }
+  #debug-panel .err { color: var(--up); }
+  #debug-panel .ok { color: var(--live); }
+  #debug-actions { display: flex; gap: 6px; margin-bottom: 6px; }
+  #debug-actions button {
+    font-family: monospace; font-size: 11px; padding: 3px 8px; border-radius: 4px;
+    background: var(--bg); border: 1px solid var(--border); color: var(--text); cursor: pointer;
+  }
 </style>
 </head>
 <body>
@@ -58,6 +85,15 @@
       </thead>
       <tbody id="quotes-body"></tbody>
     </table>
+  </div>
+
+  <button id="debug-toggle" onclick="document.getElementById('debug-panel').classList.toggle('open')">除錯記錄</button>
+  <div id="debug-panel">
+    <div id="debug-actions">
+      <button onclick="copyDebugLog()">複製記錄</button>
+      <button onclick="clearDebugLog()">清空</button>
+    </div>
+    <div id="debug-lines"></div>
   </div>
 
 <script>
@@ -81,18 +117,60 @@
     badgeText.textContent = text
   }
 
+  /* ─── Debug log: persisted to localStorage so it survives a reload, capped
+     to the last 300 entries. Every decision point in the live/static logic
+     writes here with enough detail (error name/message, HTTP status,
+     duration) to diagnose a flip after the fact from the browser that
+     actually saw it, instead of guessing from the dev machine's side. ─── */
+  const DEBUG_KEY = 'stock_debug_log_v1'
+  const DEBUG_MAX = 300
+  let debugLines = []
+  try { debugLines = JSON.parse(localStorage.getItem(DEBUG_KEY) || '[]') } catch {}
+
+  function dlog(msg, cls) {
+    const line = `${new Date().toLocaleTimeString('zh-TW', { hour12: false })}  ${msg}`
+    debugLines.push({ line, cls: cls || '' })
+    if (debugLines.length > DEBUG_MAX) debugLines.shift()
+    try { localStorage.setItem(DEBUG_KEY, JSON.stringify(debugLines)) } catch {}
+    renderDebugLog()
+  }
+  function renderDebugLog() {
+    const el = document.getElementById('debug-lines')
+    el.innerHTML = debugLines.slice().reverse()
+      .map((d) => `<div class="${d.cls}">${d.line}</div>`).join('')
+  }
+  function copyDebugLog() {
+    const text = debugLines.map((d) => d.line).join('\n')
+    navigator.clipboard.writeText(text).then(
+      () => alert('已複製 ' + debugLines.length + ' 行記錄'),
+      () => alert('複製失敗，請手動選取文字複製')
+    )
+  }
+  function clearDebugLog() {
+    debugLines = []
+    localStorage.removeItem(DEBUG_KEY)
+    renderDebugLog()
+  }
+  renderDebugLog()
+
   // Input: tunnel-registry.json ({url, updatedAt}) written by the local
   // start-with-tunnel.ps1 launcher each time cloudflared hands out a new
   // trycloudflare.com URL. Processing: confirm the registered URL is not
   // just present but actually answering right now (registry can be stale
   // if the dev machine is off). Output: the live URL, or null.
   // Failure modes: registry missing/unreachable, dynamic URL down/timed
-  // out, CORS blocked — all treated identically as "not live".
-  async function pingOnce(url) {
+  // out, CORS blocked — all treated identically as "not live", but logged
+  // with the actual error name/message so "not live" cases are distinguishable.
+  async function pingOnce(url, label) {
+    const t0 = performance.now()
     try {
       const res = await fetch(url + HEALTH_CHECK_PATH, { signal: AbortSignal.timeout(HEALTH_TIMEOUT_MS) })
+      const ms = Math.round(performance.now() - t0)
+      dlog(`  ${label} -> HTTP ${res.status} (${ms}ms)`, res.ok ? 'ok' : 'err')
       return res.ok
-    } catch {
+    } catch (err) {
+      const ms = Math.round(performance.now() - t0)
+      dlog(`  ${label} -> FAIL ${err.name}: ${err.message} (${ms}ms)`, 'err')
       return false
     }
   }
@@ -106,13 +184,18 @@
     let reg
     try {
       reg = await fetch(`${REGISTRY_URL}?_=${Date.now()}`).then((r) => r.json())
-    } catch {
+    } catch (err) {
+      dlog(`registry fetch FAILED: ${err.name}: ${err.message}`, 'err')
       return null
     }
-    if (!reg || !reg.url) return null
-    if (await pingOnce(reg.url)) return reg.url
+    if (!reg || !reg.url) {
+      dlog('registry has no url (dev machine likely not publishing right now)', 'err')
+      return null
+    }
+    dlog(`registry url = ${reg.url} (updatedAt ${reg.updatedAt})`)
+    if (await pingOnce(reg.url, 'ping #1')) return reg.url
     await new Promise((r) => setTimeout(r, 800))
-    if (await pingOnce(reg.url)) return reg.url
+    if (await pingOnce(reg.url, 'ping #2 (retry)')) return reg.url
     return null
   }
 
@@ -166,26 +249,34 @@
   let consecutiveFailures = 0
 
   async function refresh() {
+    dlog(`refresh() start, mode=${badge.className}, consecutiveFailures=${consecutiveFailures}`)
     const liveUrl = await findLiveUrl()
     if (liveUrl) {
       consecutiveFailures = 0
       setBadge('live', '即時模式 LIVE')
-      if (frame.src !== liveUrl + '/') frame.src = liveUrl
+      if (frame.src !== liveUrl + '/') {
+        dlog(`iframe src -> ${liveUrl}`)
+        frame.src = liveUrl
+      }
       frame.style.display = 'block'
       staticView.style.display = 'none'
+      dlog('-> LIVE', 'ok')
       return
     }
 
     consecutiveFailures++
     if (badge.className === 'live' && consecutiveFailures < 2) {
+      dlog(`-> staying LIVE (1 bad cycle, hysteresis holds)`, 'err')
       return // one bad cycle while already live — stay put, recheck next tick
     }
     setBadge('static', '靜態模式（每 5 分鐘更新）')
     frame.style.display = 'none'
     staticView.style.display = 'block'
     renderStatic()
+    dlog(`-> STATIC (consecutiveFailures=${consecutiveFailures})`, 'err')
   }
 
+  dlog('=== page loaded ===')
   refresh()
   setInterval(refresh, RECHECK_INTERVAL_MS)
 </script>
