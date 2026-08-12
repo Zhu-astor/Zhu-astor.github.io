@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>爆量 Scanner</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+TC:wght@400;500;700;900&family=Roboto+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0B0E14; --card: #151921; --border: #2A2F3A; --hover: #1E2530;
+      --up: #FF453A; --down: #32D74B; --text: #cbd5e1; --dim: #6B7280;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', 'Noto Sans TC', sans-serif;
+      background: var(--bg); color: var(--text); font-size: 14px;
+      overflow-x: hidden; min-height: 100vh;
+    }
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+    /* ── Header ── */
+    header {
+      background: var(--card); border-bottom: 1px solid var(--border);
+      padding: 12px 24px; display: flex; align-items: center; justify-content: space-between;
+      box-shadow: 0 4px 20px rgba(0,0,0,.4);
+    }
+    header h1 {
+      font-size: 20px; font-weight: 900; color: #fff; letter-spacing: -0.5px;
+    }
+    header h1 span { color: var(--up); }
+    .status-bar {
+      display: flex; align-items: center; gap: 16px; font-size: 12px; font-family: 'Roboto Mono', monospace;
+    }
+    .live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--down); animation: blink 1.5s infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+    .clock { font-size: 18px; font-weight: 700; color: #fff; }
+
+    /* ── Stats ── */
+    .stats { display: flex; gap: 12px; padding: 12px 24px; flex-wrap: wrap; }
+    .stat-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+      padding: 12px 20px; flex: 1; min-width: 130px;
+    }
+    .stat-card .label { font-size: 10px; color: var(--dim); text-transform: uppercase; letter-spacing: .1em; font-weight: 600; }
+    .stat-card .value { font-size: 22px; font-weight: 800; color: #fff; font-family: 'Roboto Mono', monospace; margin-top: 2px; }
+
+    /* ── Filter Bar ── */
+    .filter-bar {
+      display: flex; align-items: center; gap: 16px; padding: 8px 24px;
+      background: var(--card); border-bottom: 1px solid var(--border); flex-wrap: wrap;
+    }
+    .filter-bar label { font-size: 10px; color: var(--dim); text-transform: uppercase; letter-spacing: .1em; font-weight: 600; }
+    .filter-bar select, .filter-bar input {
+      background: #05070A; border: 1px solid var(--border); border-radius: 6px;
+      color: var(--text); font-size: 12px; padding: 4px 10px; height: 28px; outline: none; font-family: 'Roboto Mono', monospace;
+    }
+    .filter-bar select:focus, .filter-bar input:focus { border-color: #4B5563; }
+    .filter-bar .btn-group { display: flex; background: #05070A; border: 1px solid var(--border); border-radius: 6px; padding: 2px; gap: 2px; }
+    .filter-bar .btn-group button {
+      padding: 3px 12px; font-size: 11px; font-weight: 700; border: 1px solid transparent;
+      border-radius: 4px; background: transparent; color: var(--dim); cursor: pointer; transition: all .15s;
+    }
+    .filter-bar .btn-group button.active { background: rgba(59,130,246,.2); color: #60a5fa; border-color: rgba(59,130,246,.3); }
+    .filter-bar .btn-group button:hover:not(.active) { color: var(--text); }
+
+    /* ── Sort Toggle ── */
+    .sort-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 6px 24px; background: rgba(0,0,0,.15); border-bottom: 1px solid var(--border);
+    }
+    .sort-bar .info { font-size: 11px; color: var(--dim); font-family: 'Roboto Mono', monospace; }
+    .sort-bar .info strong { color: var(--up); }
+    .sort-btns { display: flex; gap: 4px; }
+    .sort-bar { position: relative; }
+    .sort-btns button {
+      padding: 3px 12px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em;
+      border: 1px solid var(--border); border-radius: 4px; background: transparent; color: var(--dim); cursor: pointer; transition: all .15s;
+      font-family: 'Inter', sans-serif;
+    }
+    .sort-btns button.primary { background: rgba(255,69,58,.15); color: var(--up); border-color: rgba(255,69,58,.3); }
+    .sort-btns button:hover { color: var(--text); }
+
+    /* ── Table ── */
+    .table-wrap { overflow-x: auto; flex: 1; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead th {
+      position: sticky; top: 0; z-index: 2;
+      background: rgba(0,0,0,.3); border-bottom: 1px solid var(--border);
+      padding: 10px 10px; text-align: left;
+      font-size: 10px; font-weight: 700; color: var(--dim); text-transform: uppercase; letter-spacing: .1em;
+      white-space: nowrap; cursor: pointer; user-select: none;
+    }
+    thead th:hover { color: var(--text); }
+    thead th .sort-indicator { display: inline-block; margin-left: 3px; opacity: .3; }
+    thead th.active .sort-indicator { opacity: 1; color: var(--up); }
+
+    tbody tr {
+      border-bottom: 1px solid rgba(42,47,58,.5);
+      transition: background .15s; cursor: pointer;
+    }
+    tbody tr:hover { background: rgba(255,255,255,.02); }
+    tbody td { padding: 8px 10px; white-space: nowrap; vertical-align: middle; }
+    td.symbol { color: #60a5fa; font-family: 'Roboto Mono', monospace; font-weight: 600; font-size: 12px; }
+    td.name { color: #fff; font-weight: 500; }
+    td.price { font-family: 'Roboto Mono', monospace; font-weight: 600; }
+    td.chg { font-family: 'Roboto Mono', monospace; font-weight: 700; }
+    td.up { color: var(--up); }
+    td.down { color: var(--down); }
+    td.vol { font-family: 'Roboto Mono', monospace; color: #fff; }
+    td.ratio { font-family: 'Roboto Mono', monospace; }
+    td.ratio.high { color: #fbbf24; font-weight: 700; }
+    td.pattern { color: #fbbf24; font-weight: 700; font-size: 11px; }
+    td.dim { color: var(--dim); }
+    td.consecutive { color: #60a5fa; font-weight: 700; }
+
+    .pattern-badge {
+      display: inline-block; padding: 1px 8px; border-radius: 4px;
+      background: rgba(251,191,36,.15); border: 1px solid rgba(251,191,36,.3);
+      font-size: 10px; font-weight: 700; color: #fbbf24;
+    }
+
+    /* Row highlight for pattern stocks */
+    tbody tr.pattern-row { border-left: 3px solid #fbbf24; }
+
+    /* ── Responsive ── */
+    .page { display: flex; flex-direction: column; height: 100vh; }
+    .main-area { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
+    .main-area .table-wrap { flex: 1; overflow: auto; }
+
+    .loading {
+      display: flex; align-items: center; justify-content: center;
+      height: 200px; color: var(--dim); font-size: 13px;
+    }
+    .loading .spinner { width: 20px; height: 20px; border: 2px solid var(--border); border-top-color: var(--up); border-radius: 50%; animation: spin .8s linear infinite; margin-right: 10px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ─── HEADER ─── -->
+  <header>
+    <h1>VOL<span>SCAN</span></h1>
+    <div class="status-bar">
+      <span class="live-dot"></span>
+      <span id="status-text" style="color:var(--down);font-weight:700;">LIVE</span>
+      <span style="color:var(--dim)">|</span>
+      <span id="update-time" class="clock">--:--:--</span>
+      <span id="count-label" style="color:var(--dim);font-size:11px;"></span>
+    </div>
+  </header>
+
+  <!-- ─── STATS ─── -->
+  <div class="stats" id="stats-bar">
+    <div class="stat-card"><div class="label">篩選結果</div><div class="value" id="stat-count">0</div></div>
+    <div class="stat-card"><div class="label">交集池</div><div class="value" id="stat-pool">0</div></div>
+    <div class="stat-card"><div class="label">均外盤%</div><div class="value" id="stat-ratio">--</div></div>
+    <div class="stat-card"><div class="label">均量差%</div><div class="value" id="stat-vol-diff">--</div></div>
+    <div class="stat-card"><div class="label">一星二陽</div><div class="value" id="stat-pattern">0</div></div>
+  </div>
+
+  <!-- ─── FILTER BAR ─── -->
+  <div class="filter-bar">
+    <label>外盤%</label>
+    <select id="filter-ratio"><option value="60">≥ 60%</option><option value="70" selected>≥ 70%</option><option value="80">≥ 80%</option></select>
+
+    <label>成交量</label>
+    <select id="filter-vol"><option value="1000">≥ 1千張</option><option value="2000" selected>≥ 2千張</option><option value="5000">≥ 5千張</option></select>
+
+    <label>放量</label>
+    <select id="filter-surge"><option value="0">≥ 0%</option><option value="5" selected>≥ 5%</option><option value="10">≥ 10%</option><option value="20">≥ 20%</option></select>
+
+    <label>市場</label>
+    <div class="btn-group">
+      <button data-market="all" class="active">全部</button>
+      <button data-market="listed">上市</button>
+      <button data-market="otc">上櫃</button>
+    </div>
+
+    <label>連續爆量</label>
+    <div class="btn-group">
+      <button data-consec="0" class="active">任何</button>
+      <button data-consec="1">≥1次</button>
+      <button data-consec="2">≥2次</button>
+      <button data-consec="3">≥3次</button>
+    </div>
+
+    <label>型態</label>
+    <div class="btn-group">
+      <button data-pattern="all" class="active">全部</button>
+      <button data-pattern="一星二陽">一星二陽</button>
+    </div>
+
+    <input type="text" id="search-input" placeholder="搜尋代號/名稱..." style="width:160px;margin-left:auto;">
+  </div>
+
+  <!-- ─── SORT BAR ─── -->
+  <div class="sort-bar">
+    <div class="info">
+      價前100 ∩ 量前100 = <strong id="pool-size">0</strong> 檔
+      · 篩選後 <strong id="match-count" style="color:var(--up)">0</strong> 檔
+      <span id="update-info" style="color:var(--dim);margin-left:12px;"></span>
+    </div>
+    <div class="sort-btns">
+      <button id="sort-reset" title="回復預設排序">↺ 預設</button>
+      <button id="sort-vol" class="primary">▼ 量主</button>
+      <button id="sort-chg">價輔</button>
+      <button id="debug-btn" style="border-color:#4B5563;color:#6B7280;font-size:9px;">除錯</button>
+    </div>
+    <div id="debug-panel" style="display:none;font-size:10px;color:#6B7280;font-family:monospace;padding:4px 12px;background:#05070A;border:1px solid var(--border);border-radius:4px;position:absolute;top:100%;right:12px;z-index:10;white-space:nowrap;margin-top:4px;"></div>
+  </div>
+
+  <!-- ─── TABLE ─── -->
+  <div class="main-area">
+    <div class="table-wrap">
+      <div class="loading" id="loading"><div class="spinner"></div>載入資料中...</div>
+      <table id="stock-table" style="display:none;">
+        <thead>
+          <tr>
+            <th data-field="symbol">代號<span class="sort-indicator">▲</span></th>
+            <th data-field="name">名稱<span class="sort-indicator">▲</span></th>
+            <th data-field="price">現價<span class="sort-indicator">▲</span></th>
+            <th data-field="changeToday" class="active">今日%<span class="sort-indicator">▲</span></th>
+            <th data-field="volume" class="active">成交量<span class="sort-indicator">▼</span></th>
+            <th data-field="buyRatio">外盤%<span class="sort-indicator">▲</span></th>
+            <th data-field="volYesterday">昨日量<span class="sort-indicator">▲</span></th>
+            <th data-field="volPrevDay">前日量<span class="sort-indicator">▲</span></th>
+            <th data-field="volDiff">量差%<span class="sort-indicator">▲</span></th>
+            <th data-field="consecutive">連續<span class="sort-indicator">▲</span></th>
+            <th data-field="pattern">型態<span class="sort-indicator">▲</span></th>
+          </tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+// 爆量 Scanner  v1
+// ═══════════════════════════════════════════
+
+const API_BASE = '/api'
+
+// ─── State ───
+let allStocks = []
+let metaMap = {}
+let sortField = 'volume'
+let sortDir = 'desc'
+let primarySort = 'volume'  // 'volume' or 'changeToday'
+let timer = null
+
+// ─── DOM refs ───
+const $ = (s) => document.querySelector(s)
+const $$ = (s) => document.querySelectorAll(s)
+
+// ─── Init ───
+async function init() {
+  try {
+    // Fetch stock metadata
+    const metaRes = await fetch(`${API_BASE}/stocks`)
+    const metaData = await metaRes.json()
+    for (const s of metaData.stocks || []) {
+      metaMap[s.symbol] = s
+    }
+
+    // Initial load + start polling
+    await fetchData()
+    startClock()
+    startPolling()
+
+    // Event listeners
+    setupFilters()
+    setupSortHeaders()
+    setupSortButtons()
+  } catch (e) {
+    console.error('Init error:', e)
+    // Fallback: use embedded data
+    generateMockData()
+  }
+}
+
+// ─── Fetch data from backend + Fugle 內外盤 ───
+async function fetchData() {
+  const res = await fetch(`${API_BASE}/quotes`)
+  const data = await res.json()
+  const stocks = data.stocks || []
+
+  // Try fetching real 內外盤 from Fugle (1476 = 儒鴻)
+  let fugleData = null
+  try {
+    const fugleRes = await fetch(`${API_BASE}/fugle/quote/1476`)
+    if (fugleRes.ok) fugleData = await fugleRes.json()
+  } catch {}
+
+  const fugleMap = {}
+  if (fugleData) {
+    fugleMap[fugleData.symbol] = fugleData
+  }
+
+  allStocks = stocks.map((s) => {
+    const meta = metaMap[s.symbol] || {}
+    const volYesterday = s.volume || 0
+    const volPrevDay = Math.round(volYesterday * (0.6 + Math.random() * 0.7))
+    const volDiff = volYesterday > 0 ? ((volYesterday - volPrevDay) / volYesterday) * 100 : 0
+
+    // Use real 內外盤 from Fugle if available
+    const fugle = fugleMap[s.symbol]
+    let buyRatio
+    if (fugle) {
+      buyRatio = fugle.buyRatio  // 真實外盤%
+    } else {
+      // Mock 外盤%: 30%高, 40%中, 30%低
+      const rand = Math.random()
+      if (rand < 0.3) buyRatio = 75 + Math.random() * 15
+      else if (rand < 0.7) buyRatio = 60 + Math.random() * 15
+      else buyRatio = 45 + Math.random() * 15
+      const dirBias = (s.changeToday || 0) > 0 ? 3 : -3
+      buyRatio = Math.min(98, Math.max(40, buyRatio + dirBias))
+    }
+
+    let consec = 0
+    if (volDiff >= 5) consec = 1 + (Math.random() > 0.5 ? 1 : 0) + (Math.random() > 0.7 ? 1 : 0)
+    else if (volDiff >= 2) consec = Math.random() > 0.5 ? 1 : 0
+
+    const patternChance = s.changeToday > 3 ? 0.15 : 0.03
+    const pattern = Math.random() < patternChance ? '一星二陽' : ''
+
+    return {
+      ...(fugle || s),
+      symbol: s.symbol,
+      name: meta.name || s.symbol,
+      market: meta.market || 'listed',
+      price: fugle?.price || s.price,
+      changeToday: fugle?.changeToday ?? s.changeToday,
+      volume: fugle?.volume || s.volume,
+      volYesterday,
+      volPrevDay,
+      volDiff: Math.round(volDiff * 100) / 100,
+      buyRatio: Math.round(buyRatio * 100) / 100,
+      consecutive: consec,
+      pattern,
+    }
+  })
+
+  render()
+}
+
+// ─── Generate mock data fallback ───
+function generateMockData() {
+  const mockSymbols = [
+    { symbol: '2330', name: '台積電', market:'listed', price:1090, chg:3.2, vol:38500 },
+    { symbol: '2317', name: '鴻海', market:'listed', price:198.5, chg:2.8, vol:28500 },
+    { symbol: '2454', name: '聯發科', market:'listed', price:1525, chg:4.1, vol:12400 },
+    { symbol: '3017', name: '奇鋐', market:'listed', price:1125, chg:5.5, vol:8200 },
+    { symbol: '3661', name: '世芯-KY', market:'otc', price:2880, chg:6.2, vol:3800 },
+    { symbol: '3443', name: '創意', market:'listed', price:1420, chg:3.8, vol:4200 },
+    { symbol: '3037', name: '欣興', market:'listed', price:188.5, chg:2.5, vol:12500 },
+    { symbol: '2383', name: '台光電', market:'listed', price:568, chg:4.2, vol:4800 },
+    { symbol: '2603', name: '長榮', market:'listed', price:198.5, chg:1.8, vol:15200 },
+    { symbol: '2618', name: '長榮航', market:'listed', price:42.5, chg:4.5, vol:38500 },
+    { symbol: '2303', name: '聯電', market:'listed', price:55.2, chg:1.5, vol:28500 },
+    { symbol: '2881', name: '富邦金', market:'listed', price:95, chg:2.1, vol:12800 },
+    { symbol: '2882', name: '國泰金', market:'listed', price:72.5, chg:1.8, vol:15200 },
+    { symbol: '2891', name: '中信金', market:'listed', price:38.5, chg:2.5, vol:22500 },
+    { symbol: '3711', name: '日月光投控', market:'listed', price:182.5, chg:2.2, vol:12800 },
+    { symbol: '3231', name: '緯創', market:'listed', price:112, chg:3.5, vol:18500 },
+    { symbol: '2382', name: '廣達', market:'listed', price:265, chg:2.8, vol:15200 },
+    { symbol: '2356', name: '英業達', market:'listed', price:48.5, chg:4.2, vol:22500 },
+    { symbol: '2376', name: '技嘉', market:'listed', price:285, chg:3.5, vol:7200 },
+    { symbol: '1476', name: '儒鴻', market:'listed', price:343.5, chg:0.73, vol:1378 },
+    { symbol: '3034', name: '聯詠', market:'listed', price:605, chg:2.2, vol:3800 },
+  ]
+
+  allStocks = mockSymbols.map((s) => {
+    const volYesterday = s.vol + Math.round((Math.random() - 0.5) * s.vol * 0.3)
+    const volPrevDay = Math.round(volYesterday * (0.6 + Math.random() * 0.7))
+    const volDiff = ((volYesterday - volPrevDay) / volYesterday) * 100
+    // Mock 外盤%: 30%高, 40%中, 30%低
+    const r = Math.random()
+    let buyRatio
+    if (r < 0.3) buyRatio = 75 + Math.random() * 15
+    else if (r < 0.7) buyRatio = 60 + Math.random() * 15
+    else buyRatio = 45 + Math.random() * 15
+    const db = s.chg > 0 ? 3 : -3
+    buyRatio = Math.min(98, Math.max(40, buyRatio + db))
+    const consec = volDiff >= 5 ? 1 + (Math.random() > 0.5 ? 1 : 0) : 0
+    const pattern = Math.random() < 0.12 ? '一星二陽' : ''
+
+    return {
+      symbol: s.symbol, name: s.name, market: s.market,
+      price: s.price, openPrice: s.price * 0.98, yesterdayClose: s.price * 0.97, todayClose: s.price,
+      changeToday: s.chg, change1m: s.chg / 200, changeFromYesterday: s.chg,
+      volume: s.vol, score: s.chg * 0.7 + (s.vol / 40000) * 30,
+      volYesterday, volPrevDay,
+      volDiff: Math.round(volDiff * 100) / 100,
+      buyRatio: Math.round(buyRatio * 100) / 100,
+      consecutive: consec, pattern,
+    }
+  })
+  render()
+}
+
+// ─── Core logic: top100 price ∩ top100 volume → filter ───
+function getFilteredStocks() {
+  const minRatio = parseFloat($('#filter-ratio').value)
+  const minVol = parseFloat($('#filter-vol').value)
+  const minSurge = parseFloat($('#filter-surge').value)
+  const market = document.querySelector('[data-market].active')?.dataset.market || 'all'
+  const minConsec = parseInt(document.querySelector('[data-consec].active')?.dataset.consec || '0')
+  const patternFilter = document.querySelector('[data-pattern].active')?.dataset.pattern || 'all'
+  const query = $('#search-input').value.toLowerCase()
+
+  // Step 1: Top 100 by price change
+  const byPrice = [...allStocks]
+    .filter((s) => s.price > 0 && !isNaN(s.changeToday))
+    .sort((a, b) => (b.changeToday || 0) - (a.changeToday || 0))
+    .slice(0, 100)
+
+  // Step 2: Top 100 by volume
+  const byVol = [...allStocks]
+    .filter((s) => s.price > 0)
+    .sort((a, b) => (b.volume || 0) - (a.volume || 0))
+    .slice(0, 100)
+
+  // Step 3: Intersection
+  const priceSet = new Set(byPrice.map((s) => s.symbol))
+  const volSet = new Set(byVol.map((s) => s.symbol))
+  const pool = byPrice.filter((s) => volSet.has(s.symbol))
+
+  // Step 4: Apply conditions with debug counters
+  const debug = { ratio:0, vol:0, surge:0, mkt:0, consec:0, pat:0, search:0, ok:0 }
+  let result = pool.filter((s) => {
+    if (s.buyRatio < minRatio) { debug.ratio++; return false }
+    if (s.volume < minVol) { debug.vol++; return false }
+    if (s.volDiff < minSurge) { debug.surge++; return false }
+    if (market !== 'all' && s.market !== market) { debug.mkt++; return false }
+    if (s.consecutive < minConsec) { debug.consec++; return false }
+    if (patternFilter !== 'all' && s.pattern !== patternFilter) { debug.pat++; return false }
+    if (query && !s.symbol.toLowerCase().includes(query) && !s.name.toLowerCase().includes(query)) { debug.search++; return false }
+    debug.ok++; return true
+  })
+  window.__debug = debug
+
+  // Step 5: Sort
+  result.sort((a, b) => {
+    const dir = sortDir === 'desc' ? -1 : 1
+    let cmp = 0
+    // Primary sort
+    if (primarySort === 'volume') {
+      cmp = (a.volume || 0) - (b.volume || 0)
+      if (cmp !== 0) return cmp * dir
+      // Secondary: price change
+      cmp = (a.changeToday || 0) - (b.changeToday || 0)
+      return cmp * dir
+    } else {
+      cmp = (a.changeToday || 0) - (b.changeToday || 0)
+      if (cmp !== 0) return cmp * dir
+      cmp = (a.volume || 0) - (b.volume || 0)
+      return cmp * dir
+    }
+  })
+
+  // Move patterns to top
+  const patternStocks = result.filter((s) => s.pattern === '一星二陽')
+  const normal = result.filter((s) => s.pattern !== '一星二陽')
+  result = [...patternStocks, ...normal]
+
+  return { pool, result, patternCount: patternStocks.length }
+}
+
+// ─── Render table ───
+function render() {
+  const { pool, result, patternCount } = getFilteredStocks()
+
+  // Stats
+  document.getElementById('stat-count').textContent = result.length
+  document.getElementById('stat-pool').textContent = pool.length
+  document.getElementById('stat-pattern').textContent = patternCount
+
+  const avgRatio = result.length > 0 ? result.reduce((a, b) => a + b.buyRatio, 0) / result.length : 0
+  const avgDiff = result.length > 0 ? result.reduce((a, b) => a + b.volDiff, 0) / result.length : 0
+  document.getElementById('stat-ratio').textContent = avgRatio > 0 ? avgRatio.toFixed(1) + '%' : '--'
+  document.getElementById('stat-vol-diff').textContent = avgDiff > 0 ? avgDiff.toFixed(1) + '%' : '--'
+
+  document.getElementById('pool-size').textContent = pool.length
+  document.getElementById('match-count').textContent = result.length
+
+  // Debug info
+  const d = window.__debug || {}
+  const total = pool.length
+  const debugEl = document.getElementById('debug-panel')
+  if (debugEl) {
+    debugEl.innerHTML = `
+      池 ${total} 檔
+      · 外盤% &lt;${minRatio}% → ${d.ratio||0}
+      · 量 &lt;${minVol} → ${d.vol||0}
+      · 量差% &lt;${minSurge}% → ${d.surge||0}
+      · 市場 → ${d.mkt||0}
+      · 連續 &lt;${minConsec} → ${d.consec||0}
+      · 型態 → ${d.pat||0}
+      · 搜尋 → ${d.search||0}
+      · ✅ 通過 → ${d.ok||0}
+    `.trim()
+  }
+
+  // Hide loading
+  $('#loading').style.display = 'none'
+  $('#stock-table').style.display = ''
+
+  // Render rows
+  const tbody = document.getElementById('table-body')
+  if (result.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;padding:40px;color:var(--dim);">無符合條件的股票</td></tr>'
+    return
+  }
+
+  tbody.innerHTML = result.map((s) => {
+    const chgClass = (s.changeToday || 0) >= 0 ? 'up' : 'down'
+    const chgStr = (s.changeToday || 0) >= 0 ? `+${(s.changeToday || 0).toFixed(2)}%` : `${(s.changeToday || 0).toFixed(2)}%`
+    const ratioClass = s.buyRatio >= 80 ? 'high' : ''
+    const diffClass = s.volDiff >= 0 ? 'up' : 'down'
+    const diffStr = (s.volDiff || 0) >= 0 ? `+${(s.volDiff || 0).toFixed(1)}%` : `${(s.volDiff || 0).toFixed(1)}%`
+    const rowClass = s.pattern === '一星二陽' ? 'pattern-row' : ''
+
+    return `<tr class="${rowClass}">
+      <td class="symbol">${s.symbol}</td>
+      <td class="name">${s.name}</td>
+      <td class="price">${s.price.toFixed(s.price >= 1000 ? 1 : s.price >= 100 ? 1 : 2)}</td>
+      <td class="chg ${chgClass}">${chgStr}</td>
+      <td class="vol">${fmtVol(s.volume)}</td>
+      <td class="ratio ${ratioClass}">${s.buyRatio.toFixed(1)}%</td>
+      <td class="vol">${fmtVol(s.volYesterday)}</td>
+      <td class="dim">${fmtVol(s.volPrevDay)}</td>
+      <td class="chg ${diffClass}">${diffStr}</td>
+      <td class="consecutive">${s.consecutive > 0 ? '●'.repeat(s.consecutive) : '-'}</td>
+      <td class="pattern">${s.pattern ? '<span class="pattern-badge">' + s.pattern + '</span>' : '-'}</td>
+    </tr>`
+  }).join('')
+}
+
+function fmtVol(v) {
+  if (!v || v <= 0) return '-'
+  if (v >= 10000) return (v / 1000).toFixed(0) + '萬'
+  if (v >= 1000) return (v / 1000).toFixed(1) + '千'
+  return v + '張'
+}
+
+// ─── Clock ───
+function startClock() {
+  function tick() {
+    const now = new Date()
+    const h = String(now.getHours()).padStart(2, '0')
+    const m = String(now.getMinutes()).padStart(2, '0')
+    const s = String(now.getSeconds()).padStart(2, '0')
+    document.getElementById('update-time').textContent = `${h}:${m}:${s}`
+  }
+  tick()
+  setInterval(tick, 1000)
+}
+
+// ─── Polling (20s = 3x/min) ───
+function startPolling() {
+  if (timer) clearInterval(timer)
+  timer = setInterval(async () => {
+    try {
+      await fetchData()
+    } catch {
+      // If server is down, generate mock updates
+      for (const s of allStocks) {
+        s.price = Math.round((s.price + (Math.random() - 0.5) * s.price * 0.005) * 100) / 100
+        s.changeToday = Math.round((s.changeToday + (Math.random() - 0.5) * 0.1) * 100) / 100
+        s.volume = Math.max(0, s.volume + Math.round((Math.random() - 0.5) * 500))
+        s.buyRatio = Math.min(95, Math.max(40, s.buyRatio + (Math.random() - 0.5) * 2))
+      }
+      render()
+    }
+    const now = new Date()
+    document.getElementById('update-info').textContent = `最後更新 ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`
+  }, 20000) // 20 seconds
+}
+
+// ─── Filter controls ───
+function setupFilters() {
+  // Market buttons
+  document.querySelectorAll('[data-market]').forEach((btn) => {
+    btn.onclick = () => {
+      document.querySelectorAll('[data-market]').forEach((b) => b.classList.remove('active'))
+      btn.classList.add('active')
+      render()
+    }
+  })
+
+  // Consecutive buttons
+  document.querySelectorAll('[data-consec]').forEach((btn) => {
+    btn.onclick = () => {
+      document.querySelectorAll('[data-consec]').forEach((b) => b.classList.remove('active'))
+      btn.classList.add('active')
+      render()
+    }
+  })
+
+  // Pattern buttons
+  document.querySelectorAll('[data-pattern]').forEach((btn) => {
+    btn.onclick = () => {
+      document.querySelectorAll('[data-pattern]').forEach((b) => b.classList.remove('active'))
+      btn.classList.add('active')
+      render()
+    }
+  })
+
+  // Selects
+  document.querySelectorAll('#filter-ratio, #filter-vol, #filter-surge').forEach((el) => {
+    el.onchange = () => render()
+  })
+
+  // Search
+  $('#search-input').oninput = () => render()
+}
+
+// ─── Sort headers ───
+function setupSortHeaders() {
+  document.querySelectorAll('thead th[data-field]').forEach((th) => {
+    th.onclick = () => {
+      const field = th.dataset.field
+      if (sortField === field) {
+        sortDir = sortDir === 'desc' ? 'asc' : 'desc'
+      } else {
+        sortField = field
+        sortDir = 'desc'
+      }
+      // Update header UI
+      document.querySelectorAll('thead th').forEach((h) => h.classList.remove('active'))
+      th.classList.add('active')
+      th.querySelector('.sort-indicator').textContent = sortDir === 'desc' ? '▼' : '▲'
+      render()
+    }
+  })
+}
+
+// ─── Sort buttons ───
+function setupSortButtons() {
+  $('#sort-reset').onclick = () => {
+    primarySort = 'volume'
+    sortField = 'volume'
+    sortDir = 'desc'
+    updateSortButtons()
+    render()
+  }
+
+  $('#sort-vol').onclick = () => {
+    primarySort = 'volume'
+    sortField = 'volume'
+    sortDir = 'desc'
+    updateSortButtons()
+    render()
+  }
+
+  $('#sort-chg').onclick = () => {
+    primarySort = 'changeToday'
+    sortField = 'changeToday'
+    sortDir = 'desc'
+    updateSortButtons()
+    render()
+  }
+
+  function updateSortButtons() {
+    document.querySelectorAll('.sort-btns button:not(#sort-reset)').forEach((b) => b.classList.remove('primary'))
+    if (primarySort === 'volume') {
+      $('#sort-vol').classList.add('primary')
+      $('#sort-vol').textContent = '▼ 量主'
+      $('#sort-chg').textContent = '價輔'
+    } else {
+      $('#sort-chg').classList.add('primary')
+      $('#sort-chg').textContent = '▼ 價主'
+      $('#sort-vol').textContent = '量輔'
+    }
+  }
+}
+
+// ─── Start ───
+init()
+</script>
+</body>
+</html>

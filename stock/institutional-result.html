@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>籌碼分析 — 詳細結果</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+TC:wght@400;500;700;900&family=Roboto+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0B0E14;--surface:#151921;--surface-2:#1a1f29;--border:#2A2F3A;--hover:#1E2530;
+  --up:#FF453A;--down:#32D74B;--text:#cbd5e1;--text-strong:#f4f6f9;--dim:#6B7280;--muted:#4b5563;--accent:#60a5fa;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter','Noto Sans TC',sans-serif;background:var(--bg);color:var(--text);font-size:21px;min-height:100vh}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+
+.page{max-width:1400px;margin:0 auto;padding:24px 32px 60px}
+
+.top-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:20px}
+.top-bar h1{font-size:29px;font-weight:900;color:#fff}
+.top-bar a.back{font-size:17px;color:var(--dim);text-decoration:none}
+.top-bar a.back:hover{color:var(--text-strong)}
+
+.cond-line{font-size:20px;color:var(--text-strong);margin-bottom:4px}
+.cond-line b{color:var(--up)}
+.count-line{font-size:18px;color:var(--dim)}
+
+.action-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:18px 0}
+button.btn{background:var(--surface-2);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:9px 16px;font-size:18px;cursor:pointer}
+button.btn:hover{border-color:var(--muted)}
+button.btn.accent{background:var(--up);border-color:var(--up);color:#fff;font-weight:700}
+select.combo-select{background:var(--surface-2);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:9px 12px;font-size:18px}
+.save-row{display:none;gap:8px;align-items:center}
+.save-row.show{display:flex}
+.save-row input{background:var(--surface-2);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:9px 12px;font-size:18px;min-width:220px}
+.save-msg{font-size:17px;color:var(--down)}
+
+.picker{display:flex;flex-direction:column;gap:14px;margin-top:20px}
+.picker-empty{color:var(--dim);font-size:20px}
+.picker-item{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px 24px;cursor:pointer;transition:border-color .15s}
+.picker-item:hover{border-color:var(--accent)}
+.picker-item .name{font-size:23px;font-weight:700;color:#fff;margin-bottom:6px}
+.picker-item .meta{font-size:17px;color:var(--dim)}
+.picker-item .del{float:right;color:var(--dim);font-size:17px}
+.picker-item .del:hover{color:var(--up)}
+
+.table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:14px;margin-top:16px}
+table{width:100%;border-collapse:collapse;font-size:21px}
+thead th{position:sticky;top:0;z-index:2;background:#0d1017;border-bottom:1px solid var(--border);padding:16px 18px;text-align:left;font-size:16px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.08em;white-space:nowrap;cursor:pointer;user-select:none}
+thead th:hover{color:var(--text-strong)}
+thead th.sorted{color:var(--accent)}
+tbody tr{border-bottom:1px solid rgba(42,47,58,.4);transition:background .15s;cursor:pointer}
+tbody tr:hover{background:rgba(255,255,255,.04)}
+td{padding:14px 18px;white-space:nowrap;vertical-align:middle;font-variant-numeric:tabular-nums;font-size:21px}
+td.sym{color:var(--accent);font-family:'Roboto Mono',monospace;font-weight:700;font-size:21px}
+td.name{color:#fff;font-weight:600}
+td.mkt{color:var(--dim);font-size:18px}
+td.num{font-family:'Roboto Mono',monospace;font-weight:600}
+td.up{color:var(--up)}td.down{color:var(--down)}
+
+.loading{color:var(--dim);font-size:20px;padding:40px 0}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="top-bar">
+    <h1>籌碼分析 · 詳細結果</h1>
+    <a class="back" href="institutional.html">← 回條件選擇頁</a>
+  </div>
+
+  <div id="header-info"></div>
+
+  <div class="action-row" id="action-row" style="display:none">
+    <button class="btn" id="save-toggle-btn">💾 另存為策略組合</button>
+    <div class="save-row" id="save-row">
+      <input type="text" id="save-name-input" placeholder="替這個組合命名…">
+      <button class="btn accent" id="save-confirm-btn">儲存</button>
+      <span class="save-msg" id="save-msg"></span>
+    </div>
+    <select class="combo-select" id="combo-switch">
+      <option value="">切換已儲存組合…</option>
+    </select>
+  </div>
+
+  <div class="loading" id="loading">載入中…</div>
+  <div id="picker" class="picker" style="display:none"></div>
+  <div id="table-container" style="display:none"></div>
+</div>
+
+<script type="module" src="js/institutional/result.js"></script>
+</body>
+</html>
