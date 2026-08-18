@@ -35,7 +35,9 @@ function goToCombo(id) {
   const combo = getCombo(id)
   if (!combo) return
   const pct = topPercent ? `&topPercent=${topPercent}` : ''
-  location.href = `/institutional-result.html?conds=${combo.conditionIds.join(',')}${pct}`
+  // Relative (no leading slash) — see the same fix's comment in main.js's
+  // openResultTab() for why: this site is deployed under /stock/, not root.
+  location.href = `institutional-result.html?conds=${combo.conditionIds.join(',')}${pct}`
 }
 
 function renderPicker() {
@@ -43,7 +45,7 @@ function renderPicker() {
   el.picker.style.display = 'flex'
   const combos = listCombos()
   if (combos.length === 0) {
-    el.picker.innerHTML = `<div class="picker-empty">尚未儲存任何策略組合。請先回到 <a href="/institutional.html" style="color:var(--accent)">條件選擇頁</a> 勾選條件、按「查看詳細」，再於此頁把目前組合存起來。</div>`
+    el.picker.innerHTML = `<div class="picker-empty">尚未儲存任何策略組合。請先回到 <a href="institutional.html" style="color:var(--accent)">條件選擇頁</a> 勾選條件、按「查看詳細」，再於此頁把目前組合存起來。</div>`
     return
   }
   el.picker.innerHTML = combos.map((c) => `
@@ -95,7 +97,13 @@ function wireResultEvents() {
       return
     }
     const row = e.target.closest('tr[data-symbol]')
-    if (row) window.open(`/stock?symbol=${row.dataset.symbol}`, '_blank')
+    // `./` (not a bare leading `?...`, and not `/stock?...`) so this resolves
+    // to the SPA's own index.html as a sibling of this file — works both
+    // under GitHub Pages' /stock/ deploy base and local dev's root. `#quote`
+    // is required too: App.tsx's hash router defaults to the Cover page for
+    // any hash it doesn't recognize, and StockDetailPage reads `symbol` from
+    // the query string separately from the hash — both pieces are needed.
+    if (row) window.open(`./?symbol=${row.dataset.symbol}#quote`, '_blank')
   })
 }
 

@@ -68,7 +68,11 @@ function toggleCard(id) {
 function openResultTab() {
   if (state.selectedIds.size === 0) return
   const ids = Array.from(state.selectedIds)
-  window.open(`/institutional-result.html?conds=${ids.join(',')}&topPercent=${state.topPercent}`, '_blank')
+  // Relative (no leading slash): this site is deployed under /stock/ on
+  // GitHub Pages, not domain root — a leading slash resolved to the wrong
+  // origin-root path and 404'd there (worked locally only because local dev
+  // happens to serve from root).
+  window.open(`institutional-result.html?conds=${ids.join(',')}&topPercent=${state.topPercent}`, '_blank')
 }
 
 function wireEvents() {
@@ -82,7 +86,7 @@ function wireEvents() {
   })
 
   el.savedCombosBtn.addEventListener('click', () => {
-    window.open('/institutional-result.html', '_blank')
+    window.open('institutional-result.html', '_blank')
   })
 
   el.marketFilter.addEventListener('click', (e) => {
