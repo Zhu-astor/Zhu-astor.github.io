@@ -20,9 +20,24 @@ function filterByMarket(list, market) {
   return list.filter((d) => d.market === market)
 }
 
-export function renderBanner(el, { sources, latest, total }) {
+// mode comes straight from dataSource.js/api.js's getMode(): 'live' (same
+// origin) | 'live-tunnel' (cloudflared) | 'static' (prebaked snapshot, no
+// reachable backend — e.g. viewed on GitHub Pages with no dev-machine tunnel
+// up). Only 'static' needs a note since that's the only mode where 立即抓取/
+// 回補 don't work and the data itself may be a few minutes to a day stale.
+function staticModeNote(mode) {
+  if (mode === 'static') {
+    return `<div class="banner warn" style="margin-top:6px">📡 靜態模式：資料為定期快照，無法即時抓取或回補；「立即抓取／回補歷史資料」已停用</div>`
+  }
+  if (mode === 'live-tunnel') {
+    return `<div class="banner" style="margin-top:6px;color:var(--dim)">📡 透過 cloudflared 連線本機看盤伺服器</div>`
+  }
+  return ''
+}
+
+export function renderBanner(el, { sources, latest, total, mode }) {
   if (!latest) {
-    el.innerHTML = `<div class="banner warn">尚無任何一天的籌碼資料，請按下方「立即抓取」或等待每日 16:00 後自動抓取。</div>`
+    el.innerHTML = `<div class="banner warn">尚無任何一天的籌碼資料，請按下方「立即抓取」或等待每日 16:00 後自動抓取。</div>${staticModeNote(mode)}`
     return
   }
   const s = sources || {}
@@ -36,7 +51,7 @@ export function renderBanner(el, { sources, latest, total }) {
   const statusLine = missing.length
     ? `<span class="warn">⚠ ${latest} 尚未齊全，缺少：${missing.join('、')}（連續天數類條件會在資料補齊前持續更新）</span>`
     : `<span class="ok">✓ ${latest} 四項來源皆已齊全</span>`
-  el.innerHTML = `<div class="banner">資料最新日期 ${latest}（共 ${total} 檔） ${statusLine}</div>`
+  el.innerHTML = `<div class="banner">資料最新日期 ${latest}（共 ${total} 檔） ${statusLine}</div>${staticModeNote(mode)}`
 }
 
 // Part-to-whole (2 categories): a single stacked bar with direct labels —

@@ -1,4 +1,5 @@
 import { loadAnalysis } from './api.js'
+import { apiUrl } from './dataSource.js'
 import { listCombos, saveCombo, getCombo, deleteCombo } from './combos.js'
 import { labelOf } from './conditions.js'
 import { renderStockTable, sortStocks } from './render.js'
@@ -128,11 +129,16 @@ async function init() {
 // come from the same live quote cache the /dashboard table reads
 // (/api/quotes), merged in here by symbol so this table can show "current
 // price" without institutional.mjs needing to know anything about live quotes.
+// In static mode (no live backend reachable) this falls back to the same
+// prebaked data/quotes.json snapshot stockAPI.ts's fetchStaticQuotes() uses.
+async function loadQuotes() {
+  const url = await apiUrl('/api/quotes')
+  const target = url === null ? `./data/quotes.json?_=${Date.now()}` : url
+  return fetch(target).then((r) => (r.ok ? r.json() : { stocks: [] })).catch(() => ({ stocks: [] }))
+}
+
 async function loadAndDraw() {
-  const [data, quotesRes] = await Promise.all([
-    loadAnalysis(topPercent),
-    fetch('/api/quotes').then((r) => (r.ok ? r.json() : { stocks: [] })).catch(() => ({ stocks: [] })),
-  ])
+  const [data, quotesRes] = await Promise.all([loadAnalysis(topPercent), loadQuotes()])
   const quoteBySymbol = new Map((quotesRes.stocks || []).map((q) => [q.symbol, q]))
   const labels = condIds.map(labelOf)
   allData = (data.stocks || [])

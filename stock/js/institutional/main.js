@@ -1,4 +1,4 @@
-import { loadAnalysis, loadStatus, fetchToday, backfill } from './api.js'
+import { loadAnalysis, loadStatus, fetchToday, backfill, getMode } from './api.js'
 import { labelOf } from './conditions.js'
 import { renderBanner, renderCards, renderMarketSplit, renderFloatingBar, filterByMarket } from './render.js'
 
@@ -145,10 +145,19 @@ async function load() {
     el.loading.style.display = 'none'
     el.cardGrid.style.display = 'grid'
 
-    renderBanner(el.banner, { sources: data.sources, latest: data.latest, total: state.allData.length })
+    renderBanner(el.banner, { sources: data.sources, latest: data.latest, total: state.allData.length, mode: getMode() })
     renderMarketSplit(el.marketSplit, { allData: state.allData })
     el.statDate.textContent = data.latest || '--'
     el.statTotal.textContent = state.allData.length
+
+    // 立即抓取/回補都需要真的觸發後端去打 TWSE/TPEx，static 模式（例如直接開
+    // GitHub Pages、偵測不到本機看盤伺服器）下沒有對應功能，先停用避免點了才
+    // 看到失敗訊息。
+    const isStatic = getMode() === 'static'
+    el.fetchNowBtn.disabled = isStatic
+    el.backfillBtn.disabled = isStatic
+    el.fetchNowBtn.title = isStatic ? '靜態頁面無法即時抓取，請在本機執行 npm run dev' : ''
+    el.backfillBtn.title = isStatic ? '靜態頁面無法回補資料，請在本機執行 npm run dev' : ''
 
     redrawCards()
     redrawFloatingBar()
