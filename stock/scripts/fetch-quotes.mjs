@@ -59,6 +59,11 @@ const stocks = [...tse, ...otc]
     if (latestMarketTick === null || tickMs > latestMarketTick) latestMarketTick = tickMs
     return {
       symbol: s.symbol,
+      // Fugle's snapshot payload already carries the company name per entry —
+      // src/types/stock.ts's Stock.name is a required field, and stockAPI.ts's
+      // static-mode branch returns this object as-is, so this is the only
+      // change needed to make the header name render without the live tunnel.
+      name: s.name,
       price: Math.round(price * 100) / 100,
       openPrice: Math.round(open * 100) / 100,
       yesterdayClose: Math.round(prevClose * 100) / 100,
